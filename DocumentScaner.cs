@@ -8,19 +8,8 @@ public class DocumentScanner
     private IntPtr handler;
     private static string? licenseKey;
 
-#if (LINUX64)
-    [DllImport("DynamsoftDocumentNormalizer")]
-    static extern IntPtr DDN_CreateInstance();
-
-    [DllImport("DynamsoftDocumentNormalizer")]
-    static extern void DDN_DestroyInstance(IntPtr handler);
-
-    [DllImport("DynamsoftDocumentNormalizer")]
-    static extern IntPtr DDN_GetVersion();
-    
-    [DllImport("DynamsoftCore")]
-    static extern int DC_InitLicense(string license, [Out] byte[] errorMsg, int errorMsgSize);
-#else 
+// https://stackoverflow.com/questions/30153797/c-sharp-preprocessor-differentiate-between-operating-systems
+#if _WINDOWS
     [DllImport("DynamsoftDocumentNormalizerx64")]
     static extern IntPtr DDN_CreateInstance();
 
@@ -31,6 +20,18 @@ public class DocumentScanner
     static extern IntPtr DDN_GetVersion();
     
     [DllImport("DynamsoftCorex64")]
+    static extern int DC_InitLicense(string license, [Out] byte[] errorMsg, int errorMsgSize);
+#else 
+    [DllImport("DynamsoftDocumentNormalizer")]
+    static extern IntPtr DDN_CreateInstance();
+
+    [DllImport("DynamsoftDocumentNormalizer")]
+    static extern void DDN_DestroyInstance(IntPtr handler);
+
+    [DllImport("DynamsoftDocumentNormalizer")]
+    static extern IntPtr DDN_GetVersion();
+    
+    [DllImport("DynamsoftCore")]
     static extern int DC_InitLicense(string license, [Out] byte[] errorMsg, int errorMsgSize);
 #endif
 
