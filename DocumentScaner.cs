@@ -275,11 +275,7 @@ public class DocumentScanner
 
     ~DocumentScanner()
     {
-        if (handler != IntPtr.Zero)
-        {
-            DDN_DestroyInstance(handler);
-            handler = IntPtr.Zero;
-        }
+        Destroy();
     }
 
     public static string? GetVersionInfo()
@@ -294,6 +290,15 @@ public class DocumentScanner
             throw new Exception("Please call InitLicense first.");
         }
         return new DocumentScanner();
+    }
+
+    public void Destroy()
+    {
+        if (handler != IntPtr.Zero)
+        {
+            DDN_DestroyInstance(handler);
+            handler = IntPtr.Zero;
+        }
     }
 
     public static void InitLicense(string license)
