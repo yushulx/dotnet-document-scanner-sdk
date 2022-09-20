@@ -5,6 +5,45 @@ using System.Runtime.InteropServices;
 
 public class DocumentScanner
 {
+    public class NormalizedImage
+    {
+        public int Width;
+        public int Height;
+        public int Stride;
+        public ImagePixelFormat Format;
+        public byte[] Data;
+
+        public IntPtr _dataPtr;
+
+        ~NormalizedImage()
+        {
+            if (_dataPtr != null) DDN_FreeNormalizedImageResult(ref _dataPtr);
+        }
+
+        public void Save(string filename)
+        {
+            #if DEBUG
+            if (_dataPtr == null) throw new System.Exception("Data is null");
+            #endif
+
+            if (_dataPtr != null)
+            {
+                NormalizedImageResult? image = (NormalizedImageResult?)Marshal.PtrToStructure(_dataPtr, typeof(NormalizedImageResult));
+                Console.WriteLine("image pointer: " + image);
+                if (image != null)
+                {
+                    int ret = DDN_SaveImageDataToFile(image.Value.ImageData, filename);
+
+                    #if DEBUG
+                    Console.WriteLine("SaveImageDataToFile: " + ret);
+                    Console.WriteLine("Save image to " + filename);
+                    #endif
+                }
+
+            }
+        }
+    }
+
     public class Result
     {
         public int Confidence { get; set; }
@@ -93,6 +132,16 @@ public class DocumentScanner
 
     [DllImport("DynamsoftDocumentNormalizerx64")]
     static extern int DDN_FreeDetectedQuadResultArray(ref IntPtr pResultArray);
+
+    [DllImport("DynamsoftDocumentNormalizerx64")]
+    static extern int DDN_NormalizeFile(IntPtr handler, string sourceFilePath, string templateName, IntPtr quad, ref IntPtr result);
+
+    [DllImport("DynamsoftDocumentNormalizerx64")]
+    static extern int DDN_FreeNormalizedImageResult(ref IntPtr result);
+
+    [DllImport("DynamsoftDocumentNormalizerx64")]
+    static extern int DDN_SaveImageDataToFile(IntPtr image, string filename);
+
 #else 
     [DllImport("DynamsoftCore")]
     static extern int DC_InitLicense(string license, [Out] byte[] errorMsg, int errorMsgSize);
@@ -115,7 +164,80 @@ public class DocumentScanner
     [DllImport("DynamsoftDocumentNormalizer")]
     static extern int DDN_FreeDetectedQuadResultArray(ref IntPtr pResultArray);
 
+    [DllImport("DynamsoftDocumentNormalizer")]
+    static extern int DDN_NormalizeFile(IntPtr handler, string sourceFilePath, string templateName, IntPtr quad, ref IntPtr result);
+
+    [DllImport("DynamsoftDocumentNormalizer")]
+    static extern int DDN_FreeNormalizedImageResult(ref IntPtr result);
+
+    [DllImport("DynamsoftDocumentNormalizer")]
+    static extern int DDN_SaveImageDataToFile(IntPtr image, string filename);
+
 #endif
+
+    public enum ImagePixelFormat
+    {
+        IPF_BINARY,
+
+        /**0:White, 1:Black */
+        IPF_BINARYINVERTED,
+
+        /**8bit gray */
+        IPF_GRAYSCALED,
+
+        /**NV21 */
+        IPF_NV21,
+
+        /**16bit with RGB channel order stored in memory from high to low address*/
+        IPF_RGB_565,
+
+        /**16bit with RGB channel order stored in memory from high to low address*/
+        IPF_RGB_555,
+
+        /**24bit with RGB channel order stored in memory from high to low address*/
+        IPF_RGB_888,
+
+        /**32bit with ARGB channel order stored in memory from high to low address*/
+        IPF_ARGB_8888,
+
+        /**48bit with RGB channel order stored in memory from high to low address*/
+        IPF_RGB_161616,
+
+        /**64bit with ARGB channel order stored in memory from high to low address*/
+        IPF_ARGB_16161616,
+
+        /**32bit with ABGR channel order stored in memory from high to low address*/
+        IPF_ABGR_8888,
+
+        /**64bit with ABGR channel order stored in memory from high to low address*/
+        IPF_ABGR_16161616,
+
+        /**24bit with BGR channel order stored in memory from high to low address*/
+        IPF_BGR_888
+    }
+
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    internal struct NormalizedImageResult
+    {
+        public IntPtr ImageData;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    internal struct ImageData
+    {
+        public int bytesLength;
+
+        public IntPtr bytes;
+
+        public int width;
+
+        public int height;
+
+        public int stride;
+
+        public ImagePixelFormat format;
+    }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal struct DetectedQuadResultArray
@@ -134,8 +256,6 @@ public class DocumentScanner
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal struct Quadrilateral
     {
-        /**Reserved memory for the struct. The length of this array indicates the size of the memory reserved for this struct. */
-
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         public DM_Point[] points;
     }
@@ -180,9 +300,9 @@ public class DocumentScanner
         byte[] errorMsg = new byte[512];
         licenseKey = license;
         DC_InitLicense(license, errorMsg, 512);
-        #if DEBUG
+#if DEBUG
         Console.WriteLine("InitLicense(): " + Encoding.ASCII.GetString(errorMsg));
-        #endif
+#endif
     }
 
     public int SetParameters(string parameters)
@@ -191,22 +311,22 @@ public class DocumentScanner
 
         byte[] errorMsg = new byte[512];
         int ret = DDN_InitRuntimeSettingsFromString(handler, parameters, errorMsg, 512);
-        #if DEBUG
+#if DEBUG
         Console.WriteLine("SetParameters(): " + Encoding.ASCII.GetString(errorMsg));
-        #endif
+#endif
         return ret;
     }
 
-    public Result[]? DetectFile(string filename) 
+    public Result[]? DetectFile(string filename)
     {
         if (handler == IntPtr.Zero) return null;
 
         IntPtr pResultArray = IntPtr.Zero;
 
         int ret = DDN_DetectQuadFromFile(handler, filename, "", ref pResultArray);
-        #if DEBUG
+#if DEBUG
         Console.WriteLine("DetectFile(): " + ret);
-        #endif
+#endif
         Result[]? resultArray = null;
         if (pResultArray != IntPtr.Zero)
         {
@@ -244,4 +364,47 @@ public class DocumentScanner
         return resultArray;
     }
 
+    public NormalizedImage NormalizeFile(string filename, int[] points)
+    {
+        if (handler == IntPtr.Zero) return new NormalizedImage();
+
+        IntPtr pResult = IntPtr.Zero;
+
+        Quadrilateral quad = new Quadrilateral();
+        quad.points = new DM_Point[4];
+        quad.points[0].coordinate = new int[2] { points[0], points[1] };
+        quad.points[1].coordinate = new int[2] { points[2], points[3] };
+        quad.points[2].coordinate = new int[2] { points[4], points[5] };
+        quad.points[3].coordinate = new int[2] { points[6], points[7] };
+
+        IntPtr pQuad = Marshal.AllocHGlobal(Marshal.SizeOf(quad));
+        Marshal.StructureToPtr(quad, pQuad, false);
+        int ret = DDN_NormalizeFile(handler, filename, "", pQuad, ref pResult);
+#if DEBUG
+        Console.WriteLine("NormalizeFile(): " + ret);
+#endif
+        Marshal.FreeHGlobal(pQuad);
+
+        NormalizedImage normalizedImage = new NormalizedImage();
+
+        NormalizedImageResult? result = (NormalizedImageResult?)Marshal.PtrToStructure(pResult, typeof(NormalizedImageResult));
+        if (result != null)
+        {
+            normalizedImage._dataPtr = pResult;
+            ImageData? imageData = (ImageData?)Marshal.PtrToStructure(result.Value.ImageData, typeof(ImageData));
+            if (imageData != null)
+            {
+                normalizedImage.Width = imageData.Value.width;
+                normalizedImage.Height = imageData.Value.height;
+                normalizedImage.Stride = imageData.Value.stride;
+                normalizedImage.Format = imageData.Value.format;
+                normalizedImage.Data = new byte[imageData.Value.bytesLength];
+                #if DEBUG
+                Console.WriteLine("NormalizeFile(): " + imageData.Value.bytesLength);
+                #endif
+                Marshal.Copy(imageData.Value.bytes, normalizedImage.Data, 0, imageData.Value.bytesLength);
+            }
+        }
+        return normalizedImage;
+    }
 }

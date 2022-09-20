@@ -36,6 +36,12 @@ namespace Test
                     {
                         Console.WriteLine("Point: " + point);
                     }
+
+                    DocumentScanner.NormalizedImage image =  scanner.NormalizeFile("1.png", result.Points);
+                    if (image != null)
+                    {
+                        image.Save("1_normalized.png");
+                    }
                 }
             }
         }
