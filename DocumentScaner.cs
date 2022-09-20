@@ -11,22 +11,18 @@ public class DocumentScanner
         public int Height;
         public int Stride;
         public ImagePixelFormat Format;
-        public byte[] Data;
+        public byte[]? Data;
 
-        public IntPtr _dataPtr;
+        public IntPtr _dataPtr = IntPtr.Zero;
 
         ~NormalizedImage()
         {
-            if (_dataPtr != null) DDN_FreeNormalizedImageResult(ref _dataPtr);
+            if (_dataPtr != IntPtr.Zero) DDN_FreeNormalizedImageResult(ref _dataPtr);
         }
 
         public void Save(string filename)
         {
-            #if DEBUG
-            if (_dataPtr == null) throw new System.Exception("Data is null");
-            #endif
-
-            if (_dataPtr != null)
+            if (_dataPtr != IntPtr.Zero)
             {
                 NormalizedImageResult? image = (NormalizedImageResult?)Marshal.PtrToStructure(_dataPtr, typeof(NormalizedImageResult));
                 Console.WriteLine("image pointer: " + image);
@@ -142,6 +138,9 @@ public class DocumentScanner
     [DllImport("DynamsoftDocumentNormalizerx64")]
     static extern int DDN_SaveImageDataToFile(IntPtr image, string filename);
 
+    [DllImport("DynamsoftDocumentNormalizerx64")]
+    static extern int DDN_DetectQuadFromBuffer(IntPtr image, IntPtr sourceImage, string templateName, ref IntPtr pResultArray);
+
 #else 
     [DllImport("DynamsoftCore")]
     static extern int DC_InitLicense(string license, [Out] byte[] errorMsg, int errorMsgSize);
@@ -172,6 +171,9 @@ public class DocumentScanner
 
     [DllImport("DynamsoftDocumentNormalizer")]
     static extern int DDN_SaveImageDataToFile(IntPtr image, string filename);
+
+    [DllImport("DynamsoftDocumentNormalizer")]
+    static extern int DDN_DetectQuadFromBuffer(IntPtr image, IntPtr sourceImage, string templateName, ref IntPtr pResultArray);
 
 #endif
 
@@ -327,41 +329,7 @@ public class DocumentScanner
 #if DEBUG
         Console.WriteLine("DetectFile(): " + ret);
 #endif
-        Result[]? resultArray = null;
-        if (pResultArray != IntPtr.Zero)
-        {
-            DetectedQuadResultArray? results = (DetectedQuadResultArray?)Marshal.PtrToStructure(pResultArray, typeof(DetectedQuadResultArray));
-            if (results != null)
-            {
-                int count = results.Value.resultsCount;
-                if (count > 0)
-                {
-                    IntPtr[] documents = new IntPtr[count];
-                    Marshal.Copy(results.Value.results, documents, 0, count);
-                    resultArray = new Result[count];
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        DetectedQuadResult? result = (DetectedQuadResult?)Marshal.PtrToStructure(documents[i], typeof(DetectedQuadResult));
-                        if (result != null)
-                        {
-                            Result r = new Result();
-                            resultArray[i] = r;
-                            r.Confidence = result.Value.confidenceAsDocumentBoundary;
-                            Quadrilateral? Quadrilateral = (Quadrilateral?)Marshal.PtrToStructure(result.Value.location, typeof(Quadrilateral));
-                            if (Quadrilateral != null)
-                            {
-                                DM_Point[] points = Quadrilateral.Value.points;
-                                r.Points = new int[8] { points[0].coordinate[0], points[0].coordinate[1], points[1].coordinate[0], points[1].coordinate[1], points[2].coordinate[0], points[2].coordinate[1], points[3].coordinate[0], points[3].coordinate[1] };
-                            }
-                        }
-                    }
-                }
-            }
-            DDN_FreeDetectedQuadResultArray(ref pResultArray);
-        }
-
-        return resultArray;
+        return GetResults(pResultArray);
     }
 
     public NormalizedImage NormalizeFile(string filename, int[] points)
@@ -399,12 +367,72 @@ public class DocumentScanner
                 normalizedImage.Stride = imageData.Value.stride;
                 normalizedImage.Format = imageData.Value.format;
                 normalizedImage.Data = new byte[imageData.Value.bytesLength];
-                #if DEBUG
-                Console.WriteLine("NormalizeFile(): " + imageData.Value.bytesLength);
-                #endif
                 Marshal.Copy(imageData.Value.bytes, normalizedImage.Data, 0, imageData.Value.bytesLength);
             }
         }
         return normalizedImage;
+    }
+
+    public Result[]? DetectBuffer(IntPtr pBufferBytes, int width, int height, int stride, ImagePixelFormat format)
+    {
+        if (handler == IntPtr.Zero) return null;
+        
+        IntPtr pResultArray = IntPtr.Zero;
+
+        ImageData imageData = new ImageData();
+        imageData.width = width;
+        imageData.height = height;
+        imageData.stride = stride;
+        imageData.format = format;
+        imageData.bytesLength = stride * height;
+        imageData.bytes = pBufferBytes;
+
+        IntPtr pimageData = Marshal.AllocHGlobal(Marshal.SizeOf(imageData));
+        Marshal.StructureToPtr(imageData, pimageData, false);
+        int ret = DDN_DetectQuadFromBuffer(handler, pimageData, "", ref pResultArray);
+        Marshal.FreeHGlobal(pimageData);
+#if DEBUG
+        Console.WriteLine("DetectBuffer(): " + ret);
+#endif
+        return GetResults(pResultArray);
+    }
+
+    private Result[]? GetResults(IntPtr pResultArray)
+    {
+        Result[]? resultArray = null;
+        if (pResultArray != IntPtr.Zero)
+        {
+            DetectedQuadResultArray? results = (DetectedQuadResultArray?)Marshal.PtrToStructure(pResultArray, typeof(DetectedQuadResultArray));
+            if (results != null)
+            {
+                int count = results.Value.resultsCount;
+                if (count > 0)
+                {
+                    IntPtr[] documents = new IntPtr[count];
+                    Marshal.Copy(results.Value.results, documents, 0, count);
+                    resultArray = new Result[count];
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        DetectedQuadResult? result = (DetectedQuadResult?)Marshal.PtrToStructure(documents[i], typeof(DetectedQuadResult));
+                        if (result != null)
+                        {
+                            Result r = new Result();
+                            resultArray[i] = r;
+                            r.Confidence = result.Value.confidenceAsDocumentBoundary;
+                            Quadrilateral? Quadrilateral = (Quadrilateral?)Marshal.PtrToStructure(result.Value.location, typeof(Quadrilateral));
+                            if (Quadrilateral != null)
+                            {
+                                DM_Point[] points = Quadrilateral.Value.points;
+                                r.Points = new int[8] { points[0].coordinate[0], points[0].coordinate[1], points[1].coordinate[0], points[1].coordinate[1], points[2].coordinate[0], points[2].coordinate[1], points[3].coordinate[0], points[3].coordinate[1] };
+                            }
+                        }
+                    }
+                }
+            }
+            DDN_FreeDetectedQuadResultArray(ref pResultArray);
+        }
+
+        return resultArray;
     }
 }

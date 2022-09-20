@@ -21,7 +21,7 @@ namespace Test
             {
                 Console.WriteLine("Platform: macOS");
             }
-            
+
             DocumentScanner.InitLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ=="); // Get a license key from https://www.dynamsoft.com/customer/license/trialLicense?product=dbr
             Console.WriteLine("Version: " + DocumentScanner.GetVersionInfo());
             DocumentScanner scanner = DocumentScanner.Create();
@@ -32,16 +32,20 @@ namespace Test
                 foreach (DocumentScanner.Result result in resultArray)
                 {
                     Console.WriteLine("Confidence: " + result.Confidence);
-                    foreach (int point in result.Points)
+                    if (result.Points != null)
                     {
-                        Console.WriteLine("Point: " + point);
+                        foreach (int point in result.Points)
+                        {
+                            Console.WriteLine("Point: " + point);
+                        }
+
+                        DocumentScanner.NormalizedImage image = scanner.NormalizeFile("1.png", result.Points);
+                        if (image != null)
+                        {
+                            image.Save("1_normalized.png");
+                        }
                     }
 
-                    DocumentScanner.NormalizedImage image =  scanner.NormalizeFile("1.png", result.Points);
-                    if (image != null)
-                    {
-                        image.Save("1_normalized.png");
-                    }
                 }
             }
         }
