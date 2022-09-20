@@ -25,7 +25,6 @@ public class DocumentScanner
             if (_dataPtr != IntPtr.Zero)
             {
                 NormalizedImageResult? image = (NormalizedImageResult?)Marshal.PtrToStructure(_dataPtr, typeof(NormalizedImageResult));
-                Console.WriteLine("image pointer: " + image);
                 if (image != null)
                 {
                     int ret = DDN_SaveImageDataToFile(image.Value.ImageData, filename);
