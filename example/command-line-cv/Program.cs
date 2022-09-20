@@ -27,9 +27,10 @@ namespace Test
             DocumentScanner.InitLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ=="); // Get a license key from https://www.dynamsoft.com/customer/license/trialLicense?product=dbr
             Console.WriteLine("Version: " + DocumentScanner.GetVersionInfo());
             DocumentScanner scanner = DocumentScanner.Create();
-            scanner.SetParameters(DocumentScanner.Templates.color);
-            
+            scanner.SetParameters(DocumentScanner.Templates.binary);
+
             Mat mat = Cv2.ImRead("1.png", ImreadModes.Color);
+            
             DocumentScanner.Result[]? resultArray = scanner.DetectBuffer(mat.Data, mat.Cols, mat.Rows, (int)mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888);
             if (resultArray != null)
             {
@@ -38,14 +39,51 @@ namespace Test
                     Console.WriteLine("Confidence: " + result.Confidence);
                     if (result.Points != null)
                     {
-                        foreach (int point in result.Points)
+                        Point[] points = new Point[4];
+                        for (int i = 0; i < 4; i++)
                         {
-                            Console.WriteLine("Point: " + point);
+                            points[i] = new Point(result.Points[i * 2], result.Points[i * 2 + 1]);
                         }
+                        Cv2.DrawContours(mat, new Point[][] { points }, 0, Scalar.Red, 2);
+                        Cv2.ImShow("Source Image", mat);
 
                         DocumentScanner.NormalizedImage image = scanner.NormalizeFile("1.png", result.Points);
-                        if (image != null)
+                        if (image != null && image.Data != null)
                         {
+                            Mat mat2;
+                            if (image.Stride < image.Width) {
+                                // binary
+                                byte[] data = new byte[image.Data.Length * 8];
+                                int index = 0;
+                                foreach (byte b in image.Data)
+                                {
+                                    int byteCount = 7;
+                                    while (byteCount >= 0)
+                                    {
+                                        int tmp = (b & (1 << byteCount)) >> byteCount;
+                                        if (tmp == 1)
+                                            data[index] = 255;
+                                        else
+                                            data[index] = 0;
+                                            
+                                        byteCount -= 1;
+                                        index += 1;
+                                    }
+                                }
+
+                                mat2 = new Mat(image.Height, image.Stride * 8, MatType.CV_8UC1, data);
+                            }
+                            else if (image.Stride >= image.Width * 3) {
+                                // color
+                                mat2 = new Mat(image.Height, image.Width, MatType.CV_8UC3, image.Data);
+                            }
+                            else {
+                                // grayscale
+                                mat2 = new Mat(image.Height, image.Width, MatType.CV_8UC1, image.Data);
+                            }
+                            Cv2.ImShow("Normalized Document Image", mat2);
+                            Cv2.WaitKey(0);
+                            Cv2.DestroyAllWindows();
                             image.Save("1_normalized.png");
                         }
                     }
