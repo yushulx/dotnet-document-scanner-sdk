@@ -82,6 +82,7 @@ namespace Test
                         Mat copy = new Mat(_mat.Rows, _mat.Cols, MatType.CV_8UC3);
                         _mat.CopyTo(copy);
                         pictureBox1.Image = DecodeMat(copy);
+                        PreviewNormalizedImage();
                     }
                     catch (Exception ex)
                     {
@@ -90,6 +91,39 @@ namespace Test
                 }
             }
         }
+
+        private void PreviewNormalizedImage()
+        {
+            if (_results != null)
+            {
+                Result result = _results[0];
+                {
+                    NormalizedImage image = scanner.NormalizeBuffer(_mat.Data, _mat.Cols, _mat.Rows, (int)_mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888, result.Points);
+                    if (image != null && image.Data != null)
+                    {
+                        Mat mat2;
+                        if (image.Stride < image.Width)
+                        {
+                            // binary
+                            byte[] data = image.Binary2Grayscale();
+                            mat2 = new Mat(image.Height, image.Stride * 8, MatType.CV_8UC1, data);
+                        }
+                        else if (image.Stride >= image.Width * 3)
+                        {
+                            // color
+                            mat2 = new Mat(image.Height, image.Width, MatType.CV_8UC3, image.Data);
+                        }
+                        else
+                        {
+                            // grayscale
+                            mat2 = new Mat(image.Height, image.Stride, MatType.CV_8UC1, image.Data);
+                        }
+                        pictureBox2.Image = BitmapConverter.ToBitmap(mat2);
+                    }
+                }
+            }
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             if (!capture.IsOpened())
@@ -195,6 +229,7 @@ namespace Test
             {
                 scanner.SetParameters(DocumentScanner.Templates.binary);
                 _color = "_binary";
+                PreviewNormalizedImage();
             }
         }
 
@@ -204,6 +239,7 @@ namespace Test
             {
                 scanner.SetParameters(DocumentScanner.Templates.color);
                 _color = "_color";
+                PreviewNormalizedImage();
             }
             
         }
@@ -214,6 +250,7 @@ namespace Test
             {
                 scanner.SetParameters(DocumentScanner.Templates.grayscale);
                 _color = "_grayscale";
+                PreviewNormalizedImage();
             }
             
         }
