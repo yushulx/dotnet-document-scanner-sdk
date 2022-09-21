@@ -36,7 +36,10 @@
             this.radioColor = new System.Windows.Forms.RadioButton();
             this.radioGrayscale = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.radioCustom = new System.Windows.Forms.RadioButton();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -111,7 +114,7 @@
             // radioColor
             // 
             this.radioColor.AutoSize = true;
-            this.radioColor.Location = new System.Drawing.Point(104, 22);
+            this.radioColor.Location = new System.Drawing.Point(69, 22);
             this.radioColor.Name = "radioColor";
             this.radioColor.Size = new System.Drawing.Size(54, 19);
             this.radioColor.TabIndex = 4;
@@ -122,7 +125,7 @@
             // radioGrayscale
             // 
             this.radioGrayscale.AutoSize = true;
-            this.radioGrayscale.Location = new System.Drawing.Point(197, 22);
+            this.radioGrayscale.Location = new System.Drawing.Point(126, 22);
             this.radioGrayscale.Name = "radioGrayscale";
             this.radioGrayscale.Size = new System.Drawing.Size(75, 19);
             this.radioGrayscale.TabIndex = 5;
@@ -132,6 +135,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.radioCustom);
             this.groupBox1.Controls.Add(this.radioBinary);
             this.groupBox1.Controls.Add(this.radioGrayscale);
             this.groupBox1.Controls.Add(this.radioColor);
@@ -141,6 +145,17 @@
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Color Mode for Normalization";
+            // 
+            // radioCustom
+            // 
+            this.radioCustom.AutoSize = true;
+            this.radioCustom.Location = new System.Drawing.Point(205, 22);
+            this.radioCustom.Name = "radioCustom";
+            this.radioCustom.Size = new System.Drawing.Size(67, 19);
+            this.radioCustom.TabIndex = 6;
+            this.radioCustom.Text = "Custom";
+            this.radioCustom.UseVisualStyleBackColor = true;
+            this.radioCustom.CheckedChanged += new System.EventHandler(this.radioCustom_CheckedChanged);
             // 
             // pictureBox2
             // 
@@ -152,12 +167,32 @@
             this.pictureBox2.TabIndex = 7;
             this.pictureBox2.TabStop = false;
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(1219, 348);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(280, 463);
+            this.richTextBox1.TabIndex = 8;
+            this.richTextBox1.Tag = "";
+            this.richTextBox1.Text = "";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(1217, 330);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(128, 15);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Custom DDN Template";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1507, 819);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button3);
@@ -173,6 +208,7 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -187,6 +223,9 @@
         private RadioButton radioGrayscale;
         private GroupBox groupBox1;
         private PictureBox pictureBox2;
+        private RichTextBox richTextBox1;
+        private Label label1;
+        private RadioButton radioCustom;
     }
 }
 

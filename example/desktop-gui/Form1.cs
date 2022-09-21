@@ -267,5 +267,22 @@ namespace Test
             }
             
         }
+
+        private void radioCustom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioCustom.Checked)
+            {
+                if (richTextBox1.Text != "")
+                {
+                    scanner.SetParameters(richTextBox1.Text);
+                    _color = "_custom";
+                    PreviewNormalizedImage();
+                }
+                else
+                {
+                    MessageBox.Show("Template is empty");
+                }
+            }
+        }
     }
 }

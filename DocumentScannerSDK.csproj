@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>DocumentScannerSDK</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.0.1</Version>
     <Authors>yushulx</Authors>
     <Company>Dynamsoft</Company>
     <TargetFramework>net6.0</TargetFramework>
@@ -15,7 +15,7 @@
     <RepositoryUrl>https://github.com/yushulx/dotnet-document-scanner-sdk</RepositoryUrl>
     <PackageTags>document;document-scan;edge-detection;document-detection</PackageTags>
     <PackageReleaseNotes>
-    	- Supports document edge detection, image cropping, perspective correction and image enhancement.
+    	- Fixed DLL dependency issue.
     </PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -53,7 +53,7 @@
     <None CopyToOutputDirectory="Always" Link="\%(Filename)%(Extension)" Include="platform/win/api-ms-win-crt-utility-l1-1-0.dll" Pack="true" PackagePath="runtimes/win-x64/native/api-ms-win-crt-utility-l1-1-0.dll"  />
     <None CopyToOutputDirectory="Always" Link="\%(Filename)%(Extension)" Include="platform/win/concrt140.dll" Pack="true" PackagePath="runtimes/win-x64/native/concrt140.dll" />
     <None CopyToOutputDirectory="Always" Link="\%(Filename)%(Extension)" Include="platform/win/DynamsoftCorex64.dll" Pack="true" PackagePath="runtimes/win-x64/native/DynamsoftCorex64.dll" />
-    <None CopyToOutputDirectory="Always" Link="\%(Filename)%(Extension)" Include="platform/win/DynamsoftDocumentNormalizerx64.dll" Pack="true" PackagePath="runtimes/win-x64/native/DynamsoftDocumentNormalizer.dll" />
+    <None CopyToOutputDirectory="Always" Link="\%(Filename)%(Extension)" Include="platform/win/DynamsoftDocumentNormalizerx64.dll" Pack="true" PackagePath="runtimes/win-x64/native/DynamsoftDocumentNormalizerx64.dll" />
     <None CopyToOutputDirectory="Always" Link="\%(Filename)%(Extension)" Include="platform/win/DynamsoftImageProcessingx64.dll" Pack="true" PackagePath="runtimes/win-x64/native/DynamsoftImageProcessingx64.dll"  />
     <None CopyToOutputDirectory="Always" Link="\%(Filename)%(Extension)" Include="platform/win/DynamsoftIntermediateResultx64.dll" Pack="true" PackagePath="runtimes/win-x64/native/DynamsoftIntermediateResultx64.dll" />
     <None CopyToOutputDirectory="Always" Link="\%(Filename)%(Extension)" Include="platform/win/msvcp140.dll" Pack="true" PackagePath="runtimes/win-x64/native/msvcp140.dll" />
