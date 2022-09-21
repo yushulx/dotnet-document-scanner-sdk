@@ -24,7 +24,7 @@ namespace Test
                 Console.WriteLine("Platform: macOS");
             }
 
-            DocumentScanner.InitLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ=="); // Get a license key from https://www.dynamsoft.com/customer/license/trialLicense?product=dbr
+            DocumentScanner.InitLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ=="); // Get a license key from https://www.dynamsoft.com/customer/license/trialLicense?product=ddn
             Console.WriteLine("Version: " + DocumentScanner.GetVersionInfo());
             DocumentScanner scanner = DocumentScanner.Create();
             scanner.SetParameters(DocumentScanner.Templates.binary);
@@ -69,7 +69,7 @@ namespace Test
                             Cv2.ImShow("Normalized Document Image", mat2);
                             Cv2.WaitKey(0);
                             Cv2.DestroyAllWindows();
-                            image.Save("1_normalized.png");
+                            image.Save(DateTime.Now.ToFileTimeUtc() + ".png");
                         }
                     }
 
