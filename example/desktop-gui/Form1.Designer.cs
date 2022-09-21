@@ -45,10 +45,10 @@
             // pictureBox1
             // 
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(11, 11);
+            this.pictureBox1.Location = new System.Drawing.Point(6, 11);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(560, 600);
+            this.pictureBox1.Size = new System.Drawing.Size(600, 800);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -58,10 +58,10 @@
             this.button1.AllowDrop = true;
             this.button1.AutoEllipsis = true;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button1.Location = new System.Drawing.Point(584, 11);
+            this.button1.Location = new System.Drawing.Point(1218, 11);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(291, 74);
+            this.button1.Size = new System.Drawing.Size(280, 74);
             this.button1.TabIndex = 1;
             this.button1.Text = "Load File";
             this.button1.UseVisualStyleBackColor = true;
@@ -72,10 +72,10 @@
             this.button2.AllowDrop = true;
             this.button2.AutoEllipsis = true;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button2.Location = new System.Drawing.Point(584, 102);
+            this.button2.Location = new System.Drawing.Point(1218, 93);
             this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(291, 74);
+            this.button2.Size = new System.Drawing.Size(280, 74);
             this.button2.TabIndex = 1;
             this.button2.Text = "Camera Scan";
             this.button2.UseVisualStyleBackColor = true;
@@ -86,10 +86,10 @@
             this.button3.AllowDrop = true;
             this.button3.AutoEllipsis = true;
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button3.Location = new System.Drawing.Point(584, 199);
+            this.button3.Location = new System.Drawing.Point(1218, 175);
             this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(291, 74);
+            this.button3.Size = new System.Drawing.Size(280, 74);
             this.button3.TabIndex = 2;
             this.button3.Text = "Save Document";
             this.button3.UseVisualStyleBackColor = true;
@@ -135,9 +135,9 @@
             this.groupBox1.Controls.Add(this.radioBinary);
             this.groupBox1.Controls.Add(this.radioGrayscale);
             this.groupBox1.Controls.Add(this.radioColor);
-            this.groupBox1.Location = new System.Drawing.Point(584, 292);
+            this.groupBox1.Location = new System.Drawing.Point(1219, 256);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(291, 56);
+            this.groupBox1.Size = new System.Drawing.Size(280, 56);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Color Mode for Normalization";
@@ -145,19 +145,19 @@
             // pictureBox2
             // 
             this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox2.Location = new System.Drawing.Point(587, 354);
+            this.pictureBox2.Location = new System.Drawing.Point(613, 11);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(288, 257);
+            this.pictureBox2.Size = new System.Drawing.Size(600, 800);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 7;
             this.pictureBox2.TabStop = false;
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(885, 615);
+            this.ClientSize = new System.Drawing.Size(1507, 819);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button3);

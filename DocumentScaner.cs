@@ -334,14 +334,15 @@ public class DocumentScanner
         }
     }
 
-    public static void InitLicense(string license)
+    public static int InitLicense(string license)
     {
         byte[] errorMsg = new byte[512];
         licenseKey = license;
-        DC_InitLicense(license, errorMsg, 512);
+        int ret = DC_InitLicense(license, errorMsg, 512);
 #if DEBUG
         Console.WriteLine("InitLicense(): " + Encoding.ASCII.GetString(errorMsg));
 #endif
+        return ret;
     }
 
     public int SetParameters(string parameters)

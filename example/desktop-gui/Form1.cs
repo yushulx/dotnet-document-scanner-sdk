@@ -24,7 +24,19 @@ namespace Test
         {
             InitializeComponent();
             FormClosing += new FormClosingEventHandler(Form1_Closing);
-            DocumentScanner.InitLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ=="); // Get a license key from https://www.dynamsoft.com/customer/license/trialLicense?product=dbr
+            string license = "";
+            try
+            {
+                license = System.IO.File.ReadAllText(@"license.txt");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
+            }
+            
+            int ret = DocumentScanner.InitLicense(license); // Get a license key from https://www.dynamsoft.com/customer/license/trialLicense?product=ddn
+            if (ret != 0) MessageBox.Show("License is invalid!");
             scanner = DocumentScanner.Create();
             capture = new VideoCapture(0);
             isCapturing = false;
@@ -138,6 +150,7 @@ namespace Test
             }
             else {
                 StopScan();
+                PreviewNormalizedImage();
             }
         }
 
