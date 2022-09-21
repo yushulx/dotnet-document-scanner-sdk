@@ -11,7 +11,7 @@ public class DocumentScanner
         public int Height;
         public int Stride;
         public ImagePixelFormat Format;
-        public byte[]? Data;
+        public byte[] Data = new byte[0];
 
         public IntPtr _dataPtr = IntPtr.Zero;
 
@@ -29,13 +29,35 @@ public class DocumentScanner
                 {
                     int ret = DDN_SaveImageDataToFile(image.Value.ImageData, filename);
 
-                    #if DEBUG
+#if DEBUG
                     Console.WriteLine("SaveImageDataToFile: " + ret);
                     Console.WriteLine("Save image to " + filename);
-                    #endif
+#endif
                 }
 
             }
+        }
+
+        public byte[] Binary2Grayscale()
+        {
+            byte[] data = new byte[Data.Length * 8];
+            int index = 0;
+            foreach (byte b in Data)
+            {
+                int byteCount = 7;
+                while (byteCount >= 0)
+                {
+                    int tmp = (b & (1 << byteCount)) >> byteCount;
+                    if (tmp == 1)
+                        data[index] = 255;
+                    else
+                        data[index] = 0;
+
+                    byteCount -= 1;
+                    index += 1;
+                }
+            }
+            return data;
         }
     }
 
@@ -380,7 +402,7 @@ public class DocumentScanner
     public Result[]? DetectBuffer(IntPtr pBufferBytes, int width, int height, int stride, ImagePixelFormat format)
     {
         if (handler == IntPtr.Zero) return null;
-        
+
         IntPtr pResultArray = IntPtr.Zero;
 
         ImageData imageData = new ImageData();

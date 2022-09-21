@@ -53,24 +53,7 @@ namespace Test
                             Mat mat2;
                             if (image.Stride < image.Width) {
                                 // binary
-                                byte[] data = new byte[image.Data.Length * 8];
-                                int index = 0;
-                                foreach (byte b in image.Data)
-                                {
-                                    int byteCount = 7;
-                                    while (byteCount >= 0)
-                                    {
-                                        int tmp = (b & (1 << byteCount)) >> byteCount;
-                                        if (tmp == 1)
-                                            data[index] = 255;
-                                        else
-                                            data[index] = 0;
-                                            
-                                        byteCount -= 1;
-                                        index += 1;
-                                    }
-                                }
-
+                                byte[] data = image.Binary2Grayscale();
                                 mat2 = new Mat(image.Height, image.Stride * 8, MatType.CV_8UC1, data);
                             }
                             else if (image.Stride >= image.Width * 3) {
@@ -79,7 +62,7 @@ namespace Test
                             }
                             else {
                                 // grayscale
-                                mat2 = new Mat(image.Height, image.Width, MatType.CV_8UC1, image.Data);
+                                mat2 = new Mat(image.Height, image.Stride, MatType.CV_8UC1, image.Data);
                             }
                             Cv2.ImShow("Normalized Document Image", mat2);
                             Cv2.WaitKey(0);
