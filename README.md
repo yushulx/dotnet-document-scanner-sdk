@@ -170,7 +170,7 @@ namespace Test
     
     ![.NET 6 command-line document scanner](https://camo.githubusercontent.com/9d36e69330ed71a44e39680b3a6b65bd2b2c1698b9bc30e272b3675f283ccef7/68747470733a2f2f7777772e64796e616d736f66742e636f6d2f636f6465706f6f6c2f696d672f323032322f30392f646f746e65742d6c696e75782d646f63756d656e742d7363616e6e65722e706e67)
 
-- [Command-line Document Scanner with OpenCVSharp Windows runtime](https://github.com/yushulx/dotnet-barcode-qr-code-sdk/tree/main/example/desktop-gui). To make it work on Linux, you need to install [OpenCVSharp4.runtime.ubuntu.18.04-x64](https://www.nuget.org/packages/OpenCvSharp4.runtime.ubuntu.18.04-x64) package.
+- [Command-line Document Scanner with OpenCVSharp Windows runtime](https://github.com/yushulx/dotnet-document-scanner-sdk/tree/main/example/command-line-cv). To make it work on Linux, you need to install [OpenCVSharp4.runtime.ubuntu.18.04-x64](https://www.nuget.org/packages/OpenCvSharp4.runtime.ubuntu.18.04-x64) package.
     
     ```bash
     dotnet run
