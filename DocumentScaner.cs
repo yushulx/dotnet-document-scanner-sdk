@@ -64,7 +64,12 @@ public class DocumentScanner
     public class Result
     {
         public int Confidence { get; set; }
-        public int[]? Points { get; set; }
+        public int[] Points { get; set; }
+
+        public Result()
+        {
+            Points = new int[4];
+        }
     }
 
     public class Templates
@@ -160,7 +165,10 @@ public class DocumentScanner
     static extern int DDN_SaveImageDataToFile(IntPtr image, string filename);
 
     [DllImport("DynamsoftDocumentNormalizerx64")]
-    static extern int DDN_DetectQuadFromBuffer(IntPtr image, IntPtr sourceImage, string templateName, ref IntPtr pResultArray);
+    static extern int DDN_DetectQuadFromBuffer(IntPtr handler, IntPtr sourceImage, string templateName, ref IntPtr pResultArray);
+
+    [DllImport("DynamsoftDocumentNormalizerx64")]
+    static extern int DDN_NormalizeBuffer(IntPtr handler, IntPtr sourceImage, string templateName, IntPtr quad, ref IntPtr result);
 
 #else 
     [DllImport("DynamsoftCore")]
@@ -194,7 +202,10 @@ public class DocumentScanner
     static extern int DDN_SaveImageDataToFile(IntPtr image, string filename);
 
     [DllImport("DynamsoftDocumentNormalizer")]
-    static extern int DDN_DetectQuadFromBuffer(IntPtr image, IntPtr sourceImage, string templateName, ref IntPtr pResultArray);
+    static extern int DDN_DetectQuadFromBuffer(IntPtr handler, IntPtr sourceImage, string templateName, ref IntPtr pResultArray);
+
+    [DllImport("DynamsoftDocumentNormalizer")]
+    static extern int DDN_NormalizeBuffer(IntPtr handler, IntPtr sourceImage, string templateName, IntPtr quad, ref IntPtr result);
 
 #endif
 
@@ -378,6 +389,59 @@ public class DocumentScanner
         Console.WriteLine("NormalizeFile(): " + ret);
 #endif
         Marshal.FreeHGlobal(pQuad);
+
+        NormalizedImage normalizedImage = new NormalizedImage();
+
+        NormalizedImageResult? result = (NormalizedImageResult?)Marshal.PtrToStructure(pResult, typeof(NormalizedImageResult));
+        if (result != null)
+        {
+            normalizedImage._dataPtr = pResult;
+            ImageData? imageData = (ImageData?)Marshal.PtrToStructure(result.Value.ImageData, typeof(ImageData));
+            if (imageData != null)
+            {
+                normalizedImage.Width = imageData.Value.width;
+                normalizedImage.Height = imageData.Value.height;
+                normalizedImage.Stride = imageData.Value.stride;
+                normalizedImage.Format = imageData.Value.format;
+                normalizedImage.Data = new byte[imageData.Value.bytesLength];
+                Marshal.Copy(imageData.Value.bytes, normalizedImage.Data, 0, imageData.Value.bytesLength);
+            }
+        }
+        return normalizedImage;
+    }
+
+    public NormalizedImage NormalizeBuffer(IntPtr pBufferBytes, int width, int height, int stride, ImagePixelFormat format, int[] points)
+    {
+        if (handler == IntPtr.Zero) return new NormalizedImage();
+
+        IntPtr pResult = IntPtr.Zero;
+
+        ImageData img = new ImageData();
+        img.width = width;
+        img.height = height;
+        img.stride = stride;
+        img.format = format;
+        img.bytesLength = stride * height;
+        img.bytes = pBufferBytes;
+
+        IntPtr pimageData = Marshal.AllocHGlobal(Marshal.SizeOf(img));
+        Marshal.StructureToPtr(img, pimageData, false);
+
+        Quadrilateral quad = new Quadrilateral();
+        quad.points = new DM_Point[4];
+        quad.points[0].coordinate = new int[2] { points[0], points[1] };
+        quad.points[1].coordinate = new int[2] { points[2], points[3] };
+        quad.points[2].coordinate = new int[2] { points[4], points[5] };
+        quad.points[3].coordinate = new int[2] { points[6], points[7] };
+
+        IntPtr pQuad = Marshal.AllocHGlobal(Marshal.SizeOf(quad));
+        Marshal.StructureToPtr(quad, pQuad, false);
+        int ret = DDN_NormalizeBuffer(handler, pimageData, "", pQuad, ref pResult);
+#if DEBUG
+        Console.WriteLine("NormalizeBuffer(): " + ret);
+#endif
+        Marshal.FreeHGlobal(pQuad);
+        Marshal.FreeHGlobal(pimageData);
 
         NormalizedImage normalizedImage = new NormalizedImage();
 

@@ -4,6 +4,9 @@ using Result = Dynamsoft.DocumentScanner.Result;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using Point = OpenCvSharp.Point;
+using static Dynamsoft.DocumentScanner;
+using System;
+using System.Windows.Forms;
 
 namespace Test
 {
@@ -13,6 +16,9 @@ namespace Test
         private VideoCapture capture;
         private bool isCapturing;
         private Thread? thread;
+        private Mat _mat = new Mat();
+        private Result[]? _results;
+        private string _color = "_binary";
 
         public Form1()
         {
@@ -22,6 +28,7 @@ namespace Test
             scanner = DocumentScanner.Create();
             capture = new VideoCapture(0);
             isCapturing = false;
+            scanner.SetParameters(DocumentScanner.Templates.binary);
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -38,10 +45,10 @@ namespace Test
         }
         private Bitmap DecodeMat(Mat mat)
         {
-            Result[]? results = scanner.DetectBuffer(mat.Data, mat.Cols, mat.Rows, (int)mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888);
-            if (results != null)
+            _results = scanner.DetectBuffer(mat.Data, mat.Cols, mat.Rows, (int)mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888);
+            if (_results != null)
             {
-                foreach (Result result in results)
+                foreach (Result result in _results)
                 {
                     if (result.Points != null)
                     {
@@ -69,11 +76,12 @@ namespace Test
 
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
-                    textBox1.Clear();
                     try
                     {
-                        Mat mat = Cv2.ImRead(dlg.FileName, ImreadModes.Color);
-                        pictureBox1.Image = DecodeMat(mat);
+                        _mat = Cv2.ImRead(dlg.FileName, ImreadModes.Color);
+                        Mat copy = new Mat(_mat.Rows, _mat.Cols, MatType.CV_8UC3);
+                        _mat.CopyTo(copy);
+                        pictureBox1.Image = DecodeMat(copy);
                     }
                     catch (Exception ex)
                     {
@@ -126,16 +134,88 @@ namespace Test
 
         private void FrameCallback() {
             while (isCapturing) {
-                Mat frame = new Mat();
-                capture.Read(frame);
+                //Mat frame = new Mat();
+                capture.Read(_mat);
                 // pictureBox1.Image = BitmapConverter.ToBitmap(frame);
-                pictureBox1.Image = DecodeMat(frame);
+                //_mat = frame;
+                Mat copy = new Mat(_mat.Rows, _mat.Cols, MatType.CV_8UC3);
+                _mat.CopyTo(copy);
+                pictureBox1.Image = DecodeMat(copy);
             }
         }
 
         private void Form1_Closing(object? sender, FormClosingEventArgs e)
         {
             StopScan();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (_results != null)
+                {
+                    foreach (Result result in _results)
+                    {
+                        NormalizedImage image = scanner.NormalizeBuffer(_mat.Data, _mat.Cols, _mat.Rows, (int)_mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888, result.Points);
+                        if (image != null && image.Data != null)
+                        {
+                            Mat mat2;
+                            if (image.Stride < image.Width)
+                            {
+                                // binary
+                                byte[] data = image.Binary2Grayscale();
+                                mat2 = new Mat(image.Height, image.Stride * 8, MatType.CV_8UC1, data);
+                            }
+                            else if (image.Stride >= image.Width * 3)
+                            {
+                                // color
+                                mat2 = new Mat(image.Height, image.Width, MatType.CV_8UC3, image.Data);
+                            }
+                            else
+                            {
+                                // grayscale
+                                mat2 = new Mat(image.Height, image.Stride, MatType.CV_8UC1, image.Data);
+                            }
+                            image.Save(Path.Join(folderBrowserDialog.SelectedPath, DateTime.Now.ToFileTimeUtc() + _color + ".png"));
+                        }
+                    }
+
+                    MessageBox.Show("Saved normalized document images to " + folderBrowserDialog.SelectedPath);
+                }
+            }
+
+            
+        }
+
+        private void radioBinary_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioBinary.Checked)
+            {
+                scanner.SetParameters(DocumentScanner.Templates.binary);
+                _color = "_binary";
+            }
+        }
+
+        private void radioColor_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioColor.Checked)
+            {
+                scanner.SetParameters(DocumentScanner.Templates.color);
+                _color = "_color";
+            }
+            
+        }
+
+        private void radioGrayscale_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioGrayscale.Checked)
+            {
+                scanner.SetParameters(DocumentScanner.Templates.grayscale);
+                _color = "_grayscale";
+            }
+            
         }
     }
 }

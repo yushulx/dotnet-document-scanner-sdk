@@ -30,8 +30,10 @@ namespace Test
             scanner.SetParameters(DocumentScanner.Templates.binary);
 
             Mat mat = Cv2.ImRead("1.png", ImreadModes.Color);
+            Mat copy = new Mat(mat.Rows, mat.Cols, MatType.CV_8UC3);
+            mat.CopyTo(copy);
             
-            DocumentScanner.Result[]? resultArray = scanner.DetectBuffer(mat.Data, mat.Cols, mat.Rows, (int)mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888);
+            DocumentScanner.Result[]? resultArray = scanner.DetectBuffer(copy.Data, copy.Cols, copy.Rows, (int)copy.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888);
             if (resultArray != null)
             {
                 foreach (DocumentScanner.Result result in resultArray)
@@ -47,7 +49,7 @@ namespace Test
                         Cv2.DrawContours(mat, new Point[][] { points }, 0, Scalar.Red, 2);
                         Cv2.ImShow("Source Image", mat);
 
-                        DocumentScanner.NormalizedImage image = scanner.NormalizeFile("1.png", result.Points);
+                        DocumentScanner.NormalizedImage image = scanner.NormalizeBuffer(mat.Data, mat.Cols, mat.Rows, (int)mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888, result.Points);
                         if (image != null && image.Data != null)
                         {
                             Mat mat2;
