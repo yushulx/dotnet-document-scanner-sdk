@@ -168,7 +168,7 @@ namespace Test
     dotnet run --configuration Release
     ```
     
-    ![.NET 6 command-line barcode and QR code reader](https://www.dynamsoft.com/codepool/img/2022/09/dotnet-linux-document-scanner.png)
+    ![.NET 6 command-line document scanner](https://camo.githubusercontent.com/9d36e69330ed71a44e39680b3a6b65bd2b2c1698b9bc30e272b3675f283ccef7/68747470733a2f2f7777772e64796e616d736f66742e636f6d2f636f6465706f6f6c2f696d672f323032322f30392f646f746e65742d6c696e75782d646f63756d656e742d7363616e6e65722e706e67)
 
 - [Command-line Document Scanner with OpenCVSharp Windows runtime](https://github.com/yushulx/dotnet-barcode-qr-code-sdk/tree/main/example/desktop-gui). To make it work on Linux, you need to install [OpenCVSharp4.runtime.ubuntu.18.04-x64](https://www.nuget.org/packages/OpenCvSharp4.runtime.ubuntu.18.04-x64) package.
     
@@ -176,7 +176,7 @@ namespace Test
     dotnet run
     ```
     
-    ![.NET document scanner with OpenCVSharp](https://www.dynamsoft.com/codepool/img/2022/09/dotnet-document-scanner.png) 
+    ![.NET document scanner with OpenCVSharp](https://camo.githubusercontent.com/e50e27160a11015c675a78c790aeee579bf2b1693d77cfd8e3577e5892fc1546/68747470733a2f2f7777772e64796e616d736f66742e636f6d2f636f6465706f6f6c2f696d672f323032322f30392f646f746e65742d646f63756d656e742d7363616e6e65722e706e67) 
 
 - [WinForms Desktop Document Scanner](https://github.com/yushulx/dotnet-document-scanner-sdk/tree/main/example/desktop-gui) (**Windows Only**)
   
@@ -184,7 +184,7 @@ namespace Test
     dotnet run
     ```
     
-    ![.NET WinForms Document Scanner](https://www.dynamsoft.com/codepool/img/2022/09/dotnet-winform-document-scanner.png)
+    ![.NET WinForms Document Scanner](https://camo.githubusercontent.com/c43884777d0e2379c0aada242cbcd4edd7f66bfa518e72058774dbe1d2708363/68747470733a2f2f7777772e64796e616d736f66742e636f6d2f636f6465706f6f6c2f696d672f323032322f30392f646f746e65742d77696e666f726d2d646f63756d656e742d7363616e6e65722e706e67)
     
 ## Building NuGet Package from Source Code
 
