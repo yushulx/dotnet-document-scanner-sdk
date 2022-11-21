@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>DocumentScannerSDK</PackageId>
-    <Version>1.0.0.1</Version>
+    <Version>1.0.1</Version>
     <Authors>yushulx</Authors>
     <Company>Dynamsoft</Company>
     <TargetFramework>net6.0</TargetFramework>
@@ -15,7 +15,7 @@
     <RepositoryUrl>https://github.com/yushulx/dotnet-document-scanner-sdk</RepositoryUrl>
     <PackageTags>document;document-scan;edge-detection;document-detection</PackageTags>
     <PackageReleaseNotes>
-    	- Fixed DLL dependency issue.
+    	- Fixed grayscale image display.
     </PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>

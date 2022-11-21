@@ -25,15 +25,16 @@ namespace Test
             InitializeComponent();
             FormClosing += new FormClosingEventHandler(Form1_Closing);
             string license = "";
-            try
-            {
-                license = System.IO.File.ReadAllText(@"license.txt");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-                license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
-            }
+            // try
+            // {
+            //     license = System.IO.File.ReadAllText(@"license.txt");
+            // }
+            // catch (Exception ex)
+            // {
+            //     MessageBox.Show(ex.ToString());
+            //     license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
+            // }
+            license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
             
             int ret = DocumentScanner.InitLicense(license); // Get a license key from https://www.dynamsoft.com/customer/license/trialLicense?product=ddn
             if (ret != 0) MessageBox.Show("License is invalid!");
@@ -118,7 +119,7 @@ namespace Test
                         {
                             // binary
                             byte[] data = image.Binary2Grayscale();
-                            mat2 = new Mat(image.Height, image.Stride * 8, MatType.CV_8UC1, data);
+                            mat2 = new Mat(image.Height, image.Width, MatType.CV_8UC1, data);
                         }
                         else if (image.Stride >= image.Width * 3)
                         {

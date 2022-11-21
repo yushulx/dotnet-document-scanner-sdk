@@ -40,24 +40,37 @@ public class DocumentScanner
 
         public byte[] Binary2Grayscale()
         {
-            byte[] data = new byte[Data.Length * 8];
+            byte[] output = new byte[Width * Height];
             int index = 0;
+
+            int skip = Stride * 8 - Width;
+            int shift = 0;
+            int n = 1;
+
             foreach (byte b in Data)
             {
                 int byteCount = 7;
                 while (byteCount >= 0)
                 {
                     int tmp = (b & (1 << byteCount)) >> byteCount;
-                    if (tmp == 1)
-                        data[index] = 255;
-                    else
-                        data[index] = 0;
+
+                    if (shift < Stride * 8 * n - skip) {
+                        if (tmp == 1)
+                            output[index] = 255;
+                        else
+                            output[index] = 0;
+                        index += 1;
+                    }
 
                     byteCount -= 1;
-                    index += 1;
+                    shift += 1;
+                }
+
+                if (shift == Stride * 8 * n) {
+                    n += 1;
                 }
             }
-            return data;
+            return output;
         }
     }
 
