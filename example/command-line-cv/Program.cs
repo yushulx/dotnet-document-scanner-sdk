@@ -33,7 +33,11 @@ namespace Test
             Mat copy = new Mat(mat.Rows, mat.Cols, MatType.CV_8UC3);
             mat.CopyTo(copy);
             
-            DocumentScanner.Result[]? resultArray = scanner.DetectBuffer(copy.Data, copy.Cols, copy.Rows, (int)copy.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888);
+            int length = copy.Cols * copy.Rows * copy.ElemSize();
+            byte[] bytes = new byte[length];
+            Marshal.Copy(copy.Data, bytes, 0, length);
+
+            DocumentScanner.Result[]? resultArray = scanner.DetectBuffer(bytes, copy.Cols, copy.Rows, (int)copy.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888);
             if (resultArray != null)
             {
                 foreach (DocumentScanner.Result result in resultArray)
@@ -49,14 +53,14 @@ namespace Test
                         Cv2.DrawContours(mat, new Point[][] { points }, 0, Scalar.Red, 2);
                         Cv2.ImShow("Source Image", mat);
 
-                        DocumentScanner.NormalizedImage image = scanner.NormalizeBuffer(mat.Data, mat.Cols, mat.Rows, (int)mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888, result.Points);
+                        DocumentScanner.NormalizedImage image = scanner.NormalizeBuffer(bytes, copy.Cols, copy.Rows, (int)copy.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888, result.Points);
                         if (image != null && image.Data != null)
                         {
                             Mat mat2;
                             if (image.Stride < image.Width) {
                                 // binary
                                 byte[] data = image.Binary2Grayscale();
-                                mat2 = new Mat(image.Height, image.Stride * 8, MatType.CV_8UC1, data);
+                                mat2 = new Mat(image.Height, image.Width, MatType.CV_8UC1, data);
                             }
                             else if (image.Stride >= image.Width * 3) {
                                 // color
@@ -66,7 +70,7 @@ namespace Test
                                 // grayscale
                                 mat2 = new Mat(image.Height, image.Stride, MatType.CV_8UC1, image.Data);
                             }
-                            Cv2.ImShow("Normalized Document Image", mat2);
+                            Cv2.ImShow("Rectified Document", mat2);
                             Cv2.WaitKey(0);
                             Cv2.DestroyAllWindows();
                             image.Save(DateTime.Now.ToFileTimeUtc() + ".png");

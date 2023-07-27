@@ -424,9 +424,13 @@ public class DocumentScanner
         return normalizedImage;
     }
 
-    public NormalizedImage NormalizeBuffer(IntPtr pBufferBytes, int width, int height, int stride, ImagePixelFormat format, int[] points)
+    public NormalizedImage NormalizeBuffer(byte[] buffer, int width, int height, int stride, ImagePixelFormat format, int[] points)
     {
         if (handler == IntPtr.Zero) return new NormalizedImage();
+
+        int length = buffer.Length;
+        IntPtr pBufferBytes = Marshal.AllocHGlobal(length);
+        Marshal.Copy(buffer, 0, pBufferBytes, length);
 
         IntPtr pResult = IntPtr.Zero;
 
@@ -474,12 +478,19 @@ public class DocumentScanner
                 Marshal.Copy(imageData.Value.bytes, normalizedImage.Data, 0, imageData.Value.bytesLength);
             }
         }
+
+        Marshal.FreeHGlobal(pBufferBytes);
+
         return normalizedImage;
     }
 
-    public Result[]? DetectBuffer(IntPtr pBufferBytes, int width, int height, int stride, ImagePixelFormat format)
+    public Result[]? DetectBuffer(byte[] buffer, int width, int height, int stride, ImagePixelFormat format)
     {
         if (handler == IntPtr.Zero) return null;
+
+        int length = buffer.Length;
+        IntPtr pBufferBytes = Marshal.AllocHGlobal(length);
+        Marshal.Copy(buffer, 0, pBufferBytes, length);
 
         IntPtr pResultArray = IntPtr.Zero;
 
@@ -498,6 +509,9 @@ public class DocumentScanner
 #if DEBUG
         Console.WriteLine("DetectBuffer(): " + ret);
 #endif
+
+        Marshal.FreeHGlobal(pBufferBytes);
+
         return GetResults(pResultArray);
     }
 

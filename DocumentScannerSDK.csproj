@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>DocumentScannerSDK</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
     <Authors>yushulx</Authors>
     <Company>Dynamsoft</Company>
     <TargetFramework>net6.0</TargetFramework>
@@ -15,7 +15,7 @@
     <RepositoryUrl>https://github.com/yushulx/dotnet-document-scanner-sdk</RepositoryUrl>
     <PackageTags>document;document-scan;edge-detection;document-detection</PackageTags>
     <PackageReleaseNotes>
-    	- Fixed grayscale image display.
+    	- Changed IntPtr to byte[].
     </PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>

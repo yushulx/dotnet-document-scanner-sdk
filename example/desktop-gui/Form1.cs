@@ -7,6 +7,7 @@ using Point = OpenCvSharp.Point;
 using static Dynamsoft.DocumentScanner;
 using System;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace Test
 {
@@ -58,7 +59,11 @@ namespace Test
         }
         private Bitmap DecodeMat(Mat mat)
         {
-            _results = scanner.DetectBuffer(mat.Data, mat.Cols, mat.Rows, (int)mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888);
+            int length = mat.Cols * mat.Rows * mat.ElemSize();
+            byte[] bytes = new byte[length];
+            Marshal.Copy(mat.Data, bytes, 0, length);
+
+            _results = scanner.DetectBuffer(bytes, mat.Cols, mat.Rows, (int)mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888);
             if (_results != null)
             {
                 foreach (Result result in _results)
@@ -111,7 +116,11 @@ namespace Test
             {
                 Result result = _results[0];
                 {
-                    NormalizedImage image = scanner.NormalizeBuffer(_mat.Data, _mat.Cols, _mat.Rows, (int)_mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888, result.Points);
+                    int length = _mat.Cols * _mat.Rows * _mat.ElemSize();
+                    byte[] bytes = new byte[length];
+                    Marshal.Copy(_mat.Data, bytes, 0, length);
+
+                    NormalizedImage image = scanner.NormalizeBuffer(bytes, _mat.Cols, _mat.Rows, (int)_mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888, result.Points);
                     if (image != null && image.Data != null)
                     {
                         Mat mat2;
@@ -206,7 +215,11 @@ namespace Test
                 {
                     foreach (Result result in _results)
                     {
-                        NormalizedImage image = scanner.NormalizeBuffer(_mat.Data, _mat.Cols, _mat.Rows, (int)_mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888, result.Points);
+                        int length = _mat.Cols * _mat.Rows * _mat.ElemSize();
+                        byte[] bytes = new byte[length];
+                        Marshal.Copy(_mat.Data, bytes, 0, length);
+
+                        NormalizedImage image = scanner.NormalizeBuffer(bytes, _mat.Cols, _mat.Rows, (int)_mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888, result.Points);
                         if (image != null && image.Data != null)
                         {
                             Mat mat2;
@@ -214,7 +227,7 @@ namespace Test
                             {
                                 // binary
                                 byte[] data = image.Binary2Grayscale();
-                                mat2 = new Mat(image.Height, image.Stride * 8, MatType.CV_8UC1, data);
+                                mat2 = new Mat(image.Height, image.Width, MatType.CV_8UC1, data);
                             }
                             else if (image.Stride >= image.Width * 3)
                             {

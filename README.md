@@ -18,9 +18,9 @@ Click [here](https://www.dynamsoft.com/customer/license/trialLicense?product=ddn
 - `public static void InitLicense(string license)`
 - `public static DocumentScanner Create()`
 - `public Result[]? DetectFile(string filename)`
-- `public Result[]? DetectBuffer(IntPtr pBufferBytes, int width, int height, int stride, ImagePixelFormat format)`
+- `public Result[]? DetectBuffer(byte[] buffer, int width, int height, int stride, ImagePixelFormat format)`
 - `public NormalizedImage NormalizeFile(string filename, int[] points)`
-- `public NormalizedImage NormalizeBuffer(IntPtr pBufferBytes, int width, int height, int stride, ImagePixelFormat format, int[] points)`
+- `public NormalizedImage NormalizeBuffer(byte[] buffer, int width, int height, int stride, ImagePixelFormat format, int[] points)`
 - `public static string? GetVersionInfo()`
 - `public void SetParameters(string parameters)`
 
@@ -45,7 +45,12 @@ Click [here](https://www.dynamsoft.com/customer/license/trialLicense?product=ddn
     
     ```csharp
     Mat mat = Cv2.ImRead(filename, ImreadModes.Color);
-    Result[]? resultArray = scanner.DetectBuffer(copy.Data, copy.Cols, copy.Rows, (int)copy.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888);
+
+    int length = mat.Cols * mat.Rows * mat.ElemSize();
+    byte[] bytes = new byte[length];
+    Marshal.Copy(mat.Data, bytes, 0, length);
+
+    Result[]? resultArray = scanner.DetectBuffer(bytes, mat.Cols, mat.Rows, (int)mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888);
     ```     
     
 - Normalize the detected documents from an image file:
@@ -78,7 +83,11 @@ Click [here](https://www.dynamsoft.com/customer/license/trialLicense?product=ddn
         {
             if (result.Points != null)
             {
-                DocumentScanner.NormalizedImage image = scanner.NormalizeBuffer(mat.Data, mat.Cols, mat.Rows, (int)mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888, result.Points);
+                int length = mat.Cols * mat.Rows * mat.ElemSize();
+                byte[] bytes = new byte[length];
+                Marshal.Copy(mat.Data, bytes, 0, length);
+
+                DocumentScanner.NormalizedImage image = scanner.NormalizeBuffer(bytes, mat.Cols, mat.Rows, (int)mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888, result.Points);
                 if (image != null && image.Data != null)
                 {
                     image.Save(DateTime.Now.ToFileTimeUtc() + ".png");
