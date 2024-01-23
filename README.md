@@ -9,26 +9,23 @@ Click [here](https://www.dynamsoft.com/customer/license/trialLicense?product=ddn
 ## Supported Platforms
 - Windows (x64)
 - Linux (x64)
+- Android
 
-## Download .NET 6 SDK
-* [Windows](https://dotnet.microsoft.com/en-us/download#windowscmd)
-* [Linux](https://dotnet.microsoft.com/en-us/download#linuxubuntu)
-
-## Methods
-- `public static void InitLicense(string license)`
-- `public static DocumentScanner Create()`
-- `public Result[]? DetectFile(string filename)`
-- `public Result[]? DetectBuffer(byte[] buffer, int width, int height, int stride, ImagePixelFormat format)`
-- `public NormalizedImage NormalizeFile(string filename, int[] points)`
-- `public NormalizedImage NormalizeBuffer(byte[] buffer, int width, int height, int stride, ImagePixelFormat format, int[] points)`
-- `public static string? GetVersionInfo()`
-- `public void SetParameters(string parameters)`
+## API
+- `public static void InitLicense(string license)`: Initialize the license key. It must be called before creating the document scanner object.
+- `public static DocumentScanner Create()`: Create the document scanner object.
+- `public Result[]? DetectFile(string filename)`: Detect documents from an image file.
+- `public Result[]? DetectBuffer(byte[] buffer, int width, int height, int stride, ImagePixelFormat format)`: Detect documents from a buffer.
+- `public NormalizedImage NormalizeFile(string filename, int[] points)`: Normalize the detected documents from an image file.
+- `public NormalizedImage NormalizeBuffer(byte[] buffer, int width, int height, int stride, ImagePixelFormat format, int[] points)`: Normalize the detected documents from a buffer.
+- `public static string? GetVersionInfo()`: Get SDK version number.
+- `public void SetParameters(string parameters)`: Customize the parameters. Refer to [Parameter Organization](https://www.dynamsoft.com/document-normalizer/docs/core/parameters/parameter-organization-structure.html) for more details.
 
 ## Usage
 - Set the license key:
     
     ```csharp
-    DocumentScanner.InitLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ=="); 
+    DocumentScanner.InitLicense("LICENSE-KEY"); 
     ```
 - Initialize the document scanner object:
     
@@ -44,13 +41,7 @@ Click [here](https://www.dynamsoft.com/customer/license/trialLicense?product=ddn
 
     
     ```csharp
-    Mat mat = Cv2.ImRead(filename, ImreadModes.Color);
-
-    int length = mat.Cols * mat.Rows * mat.ElemSize();
-    byte[] bytes = new byte[length];
-    Marshal.Copy(mat.Data, bytes, 0, length);
-
-    Result[]? resultArray = scanner.DetectBuffer(bytes, mat.Cols, mat.Rows, (int)mat.Step(), DocumentScanner.ImagePixelFormat.IPF_RGB_888);
+    Result[]? resultArray = scanner.DetectBuffer(bytes, width, height, stride, DocumentScanner.ImagePixelFormat.IPF_RGB_888);
     ```     
     
 - Normalize the detected documents from an image file:
@@ -122,7 +113,7 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            DocumentScanner.InitLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ=="); // Get a license key from https://www.dynamsoft.com/customer/license/trialLicense?product=ddn
+            DocumentScanner.InitLicense("LICENSE-KEY"); // Get a license key from https://www.dynamsoft.com/customer/license/trialLicense?product=ddn
             DocumentScanner? scanner = null;
             try {
                 scanner = DocumentScanner.Create();
@@ -176,16 +167,13 @@ namespace Test
     # RELEASE
     dotnet run --configuration Release
     ```
-    
-    ![.NET 6 command-line document scanner](https://camo.githubusercontent.com/9d36e69330ed71a44e39680b3a6b65bd2b2c1698b9bc30e272b3675f283ccef7/68747470733a2f2f7777772e64796e616d736f66742e636f6d2f636f6465706f6f6c2f696d672f323032322f30392f646f746e65742d6c696e75782d646f63756d656e742d7363616e6e65722e706e67)
 
 - [Command-line Document Scanner with OpenCVSharp Windows runtime](https://github.com/yushulx/dotnet-document-scanner-sdk/tree/main/example/command-line-cv). To make it work on Linux, you need to install [OpenCVSharp4.runtime.ubuntu.18.04-x64](https://www.nuget.org/packages/OpenCvSharp4.runtime.ubuntu.18.04-x64) package.
     
     ```bash
     dotnet run
     ```
-    
-    ![.NET document scanner with OpenCVSharp](https://camo.githubusercontent.com/e50e27160a11015c675a78c790aeee579bf2b1693d77cfd8e3577e5892fc1546/68747470733a2f2f7777772e64796e616d736f66742e636f6d2f636f6465706f6f6c2f696d672f323032322f30392f646f746e65742d646f63756d656e742d7363616e6e65722e706e67) 
+
 
 - [WinForms Desktop Document Scanner](https://github.com/yushulx/dotnet-document-scanner-sdk/tree/main/example/desktop-gui) (**Windows Only**)
   
@@ -193,7 +181,7 @@ namespace Test
     dotnet run
     ```
     
-    ![.NET WinForms Document Scanner](https://camo.githubusercontent.com/c43884777d0e2379c0aada242cbcd4edd7f66bfa518e72058774dbe1d2708363/68747470733a2f2f7777772e64796e616d736f66742e636f6d2f636f6465706f6f6c2f696d672f323032322f30392f646f746e65742d77696e666f726d2d646f63756d656e742d7363616e6e65722e706e67)
+    ![.NET WinForms Document Scanner](https://www.dynamsoft.com/codepool/img/2022/09/dotnet-winform-document-scanner.png)
     
 ## Building NuGet Package from Source Code
 
