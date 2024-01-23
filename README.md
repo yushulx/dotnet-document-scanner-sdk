@@ -1,6 +1,6 @@
 # .NET Document Scanner SDK
 
-The .NET Document Scanner SDK is a C# wrapper for [Dynamsoft C++ Document Normalizer SDK](https://www.dynamsoft.com/document-normalizer/docs/introduction/?ver=latest). It is used to do document edge detection, image cropping, perspective correction and image enhancement.
+The .NET Document Scanner SDK is a C# wrapper for [Dynamsoft Document Normalizer SDK](https://www.dynamsoft.com/document-normalizer/docs/core/introduction/). It is used to do document edge detection, image cropping, perspective correction and image enhancement.
 
 
 ## License Activation
@@ -162,10 +162,7 @@ namespace Test
 - [Command-line Document Scanner](https://github.com/yushulx/dotnet-document-scanner-sdk/tree/main/example/command-line) (**Windows & Linux**)
     
     ```bash
-    # DEBUG
     dotnet run
-    # RELEASE
-    dotnet run --configuration Release
     ```
 
 - [Command-line Document Scanner with OpenCVSharp Windows runtime](https://github.com/yushulx/dotnet-document-scanner-sdk/tree/main/example/command-line-cv). To make it work on Linux, you need to install [OpenCVSharp4.runtime.ubuntu.18.04-x64](https://www.nuget.org/packages/OpenCvSharp4.runtime.ubuntu.18.04-x64) package.
@@ -181,10 +178,19 @@ namespace Test
     dotnet run
     ```
     
-    ![.NET WinForms Document Scanner](https://www.dynamsoft.com/codepool/img/2022/09/dotnet-winform-document-scanner.png)
+    ![.NET WinForms Document Scanner](https://camo.githubusercontent.com/ee30a750052f5392f20aefcaffbb4308cfabafa9cd610642f6b0ff669195f2dc/68747470733a2f2f7777772e64796e616d736f66742e636f6d2f636f6465706f6f6c2f696d672f323032322f30392f646f746e65742d77696e666f726d2d646f63756d656e742d7363616e6e65722e706e67)
     
 ## Building NuGet Package from Source Code
 
 ```bash
+# build dll for desktop
+cd desktop
 dotnet build --configuration Release
+
+# build dll for android
+cd android
+dotnet build --configuration Release
+
+# build nuget package
+nuget pack .\DocumentScannerSDK.nuspec
 ```

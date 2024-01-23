@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+    <metadata>
+        <id>DocumentScannerSDK</id>
+        <version>1.2.0</version>
+        <title>Document Scanner SDK</title>
+        <authors>yushulx</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <license type="expression">MIT</license>
+        <readme>README.md</readme>
+        <!-- <icon>icon.png</icon> -->
+        <projectUrl>https://github.com/yushulx/dotnet-document-scanner-sdk</projectUrl>
+        <description>The Document Scanner SDK is a .NET wrapper for Dynamsoft Document Normalizer,
+            supporting x64 Windows, x64 Linux and Android.</description>
+        <releaseNotes>Added support for Android.</releaseNotes>
+        <copyright>$copyright$</copyright>
+        <tags>document;document-scan;edge-detection;document-detection</tags>
+    </metadata>
+    <files>
+        <file src="README.md" target="" />
+        <file src="LICENSE.txt" target="" />
+
+        <!-- Desktop -->
+        <file src="desktop\lib\win\**\*.*" target="runtimes\win-x64\native" />
+        <file src="desktop\lib\linux\**\*.*" target="runtimes\linux-x64\native" />
+        <file src="desktop\bin\Release\net7.0\DocumentScannerSDK.dll" target="lib\net7.0" />
+
+        <!-- Android -->
+        <file src="android\bin\Release\net7.0-android\**\*.*" target="lib\net7.0-android33.0" />
+
+    </files>
+</package>

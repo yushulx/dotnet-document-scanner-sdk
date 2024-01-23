@@ -2,3 +2,4 @@ bin
 obj
 /example/desktop-gui/.vs
 .vs
+*.nupkg

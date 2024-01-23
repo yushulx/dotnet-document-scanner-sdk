@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <PackageId>DocumentScannerSDK</PackageId>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Authors>yushulx</Authors>
     <Company>Dynamsoft</Company>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>The Document Scanner SDK is a .NET wrapper for Dynamsoft C++ Document Normalizer,
-      supporting x64 Windows and x64 Linux.</Description>
+    <Description>The Document Scanner SDK is a .NET wrapper for Dynamsoft Document Normalizer,
+      supporting x64 Windows, x64 Linux and Android.</Description>
     <PackageProjectUrl>https://github.com/yushulx/dotnet-document-scanner-sdk</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/yushulx/dotnet-document-scanner-sdk</RepositoryUrl>
@@ -31,12 +31,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="platform/win/**/*.dll" Link="\%(Filename)%(Extension)"
+    <None Include="lib/win/**/*.dll" Link="\%(Filename)%(Extension)"
       CopyToOutputDirectory="Always"
       Pack="true"
       PackagePath="runtimes/win-x64/native/%(RecursiveDir)%(Filename)%(Extension)" />
 
-    <None Include="platform/linux/**/*.so" Link="\%(Filename)%(Extension)"
+    <None Include="lib/linux/**/*.so" Link="\%(Filename)%(Extension)"
       CopyToOutputDirectory="Always"
       Pack="true"
       PackagePath="runtimes/linux-x64/native/%(RecursiveDir)%(Filename)%(Extension)" />
