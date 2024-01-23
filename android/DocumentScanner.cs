@@ -1,9 +1,9 @@
 using Com.Dynamsoft.Core;
 using Com.Dynamsoft.Ddn;
 
-namespace DocumentScannerSDK
+namespace Dynamsoft
 {
-    public class DocumentScaner
+    public class DocumentScanner
     {
         private DocumentNormalizer normalizer;
 
@@ -129,14 +129,14 @@ namespace DocumentScannerSDK
             LicenseManager.InitLicense(license, (Android.Content.Context)context, new LicenseVerificationListener());
         }
 
-        private DocumentScaner()
+        private DocumentScanner()
         {
             normalizer = new DocumentNormalizer();
         }
 
-        public static DocumentScaner Create()
+        public static DocumentScanner Create()
         {
-            return new DocumentScaner();
+            return new DocumentScanner();
         }
 
         public void SetParameters(string parameters)
