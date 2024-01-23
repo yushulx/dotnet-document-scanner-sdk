@@ -159,6 +159,7 @@ namespace Test
 
 
 ## Example
+- [.NET MAUI for Android](https://github.com/yushulx/dotnet-document-scanner-sdk/tree/main/example/MauiAndroid)
 - [Command-line Document Scanner](https://github.com/yushulx/dotnet-document-scanner-sdk/tree/main/example/command-line) (**Windows & Linux**)
     
     ```bash
