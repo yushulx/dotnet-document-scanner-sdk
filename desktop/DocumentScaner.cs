@@ -54,7 +54,8 @@ public class DocumentScanner
                 {
                     int tmp = (b & (1 << byteCount)) >> byteCount;
 
-                    if (shift < Stride * 8 * n - skip) {
+                    if (shift < Stride * 8 * n - skip)
+                    {
                         if (tmp == 1)
                             output[index] = 255;
                         else
@@ -66,7 +67,8 @@ public class DocumentScanner
                     shift += 1;
                 }
 
-                if (shift == Stride * 8 * n) {
+                if (shift == Stride * 8 * n)
+                {
                     n += 1;
                 }
             }
@@ -347,7 +349,7 @@ public class DocumentScanner
         }
     }
 
-    public static int InitLicense(string license)
+    public static void InitLicense(string license, object? context = null)
     {
         byte[] errorMsg = new byte[512];
         licenseKey = license;
@@ -355,7 +357,10 @@ public class DocumentScanner
 #if DEBUG
         Console.WriteLine("InitLicense(): " + Encoding.ASCII.GetString(errorMsg));
 #endif
-        return ret;
+        if (ret != 0)
+        {
+            throw new Exception("InitLicense(): " + Encoding.ASCII.GetString(errorMsg));
+        }
     }
 
     public int SetParameters(string parameters)
