@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0-ios</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>true</ImplicitUsings>
+    <IsBindingProject>true</IsBindingProject>
+    <AssemblyName>DocumentScannerSDK</AssemblyName>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ObjcBindingApiDefinition Include="DynamsoftCore/ApiDefinitions.cs" />
+    <ObjcBindingCoreSource Include="DynamsoftCore/StructsAndEnums.cs" />
+    <NativeReference Include="DynamsoftCore.framework">
+      <Kind>Framework</Kind>
+      <Frameworks></Frameworks>
+    </NativeReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ObjcBindingApiDefinition Include="DynamsoftDocumentNormalizer/ApiDefinitions.cs" />
+    <ObjcBindingCoreSource Include="DynamsoftDocumentNormalizer/StructsAndEnums.cs" />
+    <NativeReference Include="DynamsoftDocumentNormalizer.framework">
+      <Kind>Framework</Kind>
+      <Frameworks></Frameworks>
+    </NativeReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ObjcBindingApiDefinition Include="DynamsoftImageProcessing/ApiDefinitions.cs" />
+    <NativeReference Include="DynamsoftImageProcessing.framework">
+      <Kind>Framework</Kind>
+      <Frameworks></Frameworks>
+    </NativeReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ObjcBindingApiDefinition Include="DynamsoftIntermediateResult/ApiDefinitions.cs" />
+    <NativeReference Include="DynamsoftIntermediateResult.framework">
+      <Kind>Framework</Kind>
+      <Frameworks></Frameworks>
+    </NativeReference>
+  </ItemGroup>
+</Project>

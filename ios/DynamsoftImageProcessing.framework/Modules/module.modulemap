@@ -1,0 +1,6 @@
+framework module DynamsoftImageProcessing {
+  umbrella header "DynamsoftImageProcessing.h"
+
+  export *
+  module * { export * }
+}

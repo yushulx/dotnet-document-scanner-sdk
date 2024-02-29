@@ -1,0 +1,6 @@
+framework module DynamsoftDocumentNormalizer {
+  umbrella header "DynamsoftDocumentNormalizer.h"
+
+  export *
+  module * { export * }
+}

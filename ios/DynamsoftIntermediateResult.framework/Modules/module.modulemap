@@ -1,0 +1,6 @@
+framework module DynamsoftIntermediateResult {
+  umbrella header "DynamsoftIntermediateResult.h"
+
+  export *
+  module * { export * }
+}
