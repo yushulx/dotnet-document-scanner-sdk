@@ -1,6 +1,6 @@
 using ObjCRuntime;
 
-namespace Com.Dynamsoft.DocumentNormalizer
+namespace Com.Dynamsoft.Ddn
 {
 	[Native]
 	public enum EnumDDNErrorCode : long

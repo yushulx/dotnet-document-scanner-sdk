@@ -4,7 +4,7 @@ using ObjCRuntime;
 using UIKit;
 using Com.Dynamsoft.Core;
 
-namespace Com.Dynamsoft.DocumentNormalizer
+namespace Com.Dynamsoft.Ddn
 {
 	// @interface iDetectedQuadResult : NSObject
 	[BaseType(typeof(NSObject))]
