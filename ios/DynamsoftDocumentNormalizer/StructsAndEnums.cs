@@ -1,9 +1,12 @@
 using ObjCRuntime;
 
-[Native]
-public enum EnumDDNErrorCode : long
+namespace Com.Dynamsoft.DocumentNormalizer
 {
-	DnContentNotFound = -50001,
-	MQuadrilateralInvalid = -10057,
-	MImageOrientationInvalid = -10060
+	[Native]
+	public enum EnumDDNErrorCode : long
+	{
+		DnContentNotFound = -50001,
+		MQuadrilateralInvalid = -10057,
+		MImageOrientationInvalid = -10060
+	}
 }
