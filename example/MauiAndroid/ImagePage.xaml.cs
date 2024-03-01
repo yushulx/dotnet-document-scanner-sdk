@@ -1,4 +1,4 @@
-﻿#if ANDROID
+﻿#if ANDROID || IOS
 using Dynamsoft;
 using SkiaSharp;
 using SkiaSharp.Views.Maui;
@@ -8,7 +8,7 @@ namespace MauiAndroid;
 
 public partial class ImagePage : ContentPage
 {
-#if ANDROID
+#if ANDROID || IOS
     private DocumentScanner documentScanner;
     int[] points;
 
@@ -21,7 +21,7 @@ public partial class ImagePage : ContentPage
     {
         InitializeComponent();
 
-#if ANDROID
+#if ANDROID || IOS
         try
         {
             using (var stream = new SKFileStream(imagepath))
@@ -40,7 +40,7 @@ public partial class ImagePage : ContentPage
 
     }
 
-#if ANDROID
+#if ANDROID || IOS
     async void DecodeFile(string imagepath)
     {
         await Task.Run(() =>
