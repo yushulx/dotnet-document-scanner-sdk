@@ -4,14 +4,13 @@
     <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyName>DocumentScannerSDK</AssemblyName>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="DynamsoftCore.aar" />
     <None Remove="DynamsoftDocumentNormalizer.aar" />
     <None Remove="DynamsoftImageProcessing.aar" />
     <None Remove="DynamsoftIntermediateResult.aar" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="DynamsoftCoreAndroid" Version="1.0.0" />
   </ItemGroup>
 </Project>

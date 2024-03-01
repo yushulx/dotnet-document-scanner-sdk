@@ -219,9 +219,7 @@ namespace Dynamsoft
 
         public Result[]? DetectBuffer(byte[] buffer, int width, int height, int stride, ImagePixelFormat format)
         {
-            IntPtr data = Marshal.AllocHGlobal(buffer.Length);
-            Marshal.Copy(buffer, 0, data, buffer.Length);
-            NSData converted = NSData.FromBytes(data, (nuint)buffer.Length);
+            NSData converted = NSData.FromArray(buffer);
 
             iImageData imageData = new iImageData()
             {
@@ -233,7 +231,6 @@ namespace Dynamsoft
             };
             NSError error;
             iDetectedQuadResult[]? results = normalizer.DetectQuadFromBuffer(imageData, out error);
-            Marshal.Release(data);
             return GetResults(results);
         }
 
@@ -262,52 +259,55 @@ namespace Dynamsoft
             return result;
         }
 
-        //public NormalizedImage NormalizeFile(string filename, int[] points)
-        //{
-        //    Quadrilateral quad = new Quadrilateral();
-        //    quad.Points = new Android.Graphics.Point[4];
-        //    quad.Points[0] = new Android.Graphics.Point(points[0], points[1]);
-        //    quad.Points[1] = new Android.Graphics.Point(points[2], points[3]);
-        //    quad.Points[2] = new Android.Graphics.Point(points[4], points[5]);
-        //    quad.Points[3] = new Android.Graphics.Point(points[6], points[7]);
-        //    NormalizedImageResult? result = normalizer.Normalize(filename, quad);
-        //    return GetNormalizedImage(result);
-        //}
+        public NormalizedImage NormalizeFile(string filename, int[] points)
+        {
+            iQuadrilateral quad = new iQuadrilateral();
+            quad.Points = new NSObject[4];
+            //quad.Points[0].CGPointValue = new CGPoint(points[0], points[1]);
+            //quad.Points[1].CGPointValue = new CGPoint(points[2], points[3]);
+            //quad.Points[2].CGPointValue = new CGPoint(points[4], points[5]);
+            //quad.Points[3].CGPointValue = new CGPoint(points[6], points[7]);
 
-        //public NormalizedImage NormalizeBuffer(byte[] buffer, int width, int height, int stride, ImagePixelFormat format, int[] points)
-        //{
-        //    ImageData imageData = new ImageData()
-        //    {
-        //        Bytes = buffer,
-        //        Width = width,
-        //        Height = height,
-        //        Stride = stride,
-        //        Format = (int)format,
-        //    };
+            NSError error;
+            iNormalizedImageResult? result = normalizer.NormalizeFile(filename, quad, out error);
+            return GetNormalizedImage(result);
+        }
 
-        //    Quadrilateral quad = new Quadrilateral();
-        //    quad.Points = new Android.Graphics.Point[4];
-        //    quad.Points[0] = new Android.Graphics.Point(points[0], points[1]);
-        //    quad.Points[1] = new Android.Graphics.Point(points[2], points[3]);
-        //    quad.Points[2] = new Android.Graphics.Point(points[4], points[5]);
-        //    quad.Points[3] = new Android.Graphics.Point(points[6], points[7]);
-        //    NormalizedImageResult? result = normalizer.Normalize(imageData, quad);
-        //    return GetNormalizedImage(result);
-        //}
+        public NormalizedImage NormalizeBuffer(byte[] buffer, int width, int height, int stride, ImagePixelFormat format, int[] points)
+        {
+            iImageData imageData = new iImageData()
+            {
+                Bytes = NSData.FromArray(buffer),
+                Width = width,
+                Height = height,
+                Stride = stride,
+                Format = (EnumImagePixelFormat)format,
+            };
 
-        //private NormalizedImage GetNormalizedImage(NormalizedImageResult? result)
-        //{
-        //    NormalizedImage normalizedImage = new NormalizedImage();
-        //    if (result != null)
-        //    {
-        //        ImageData imageData = result.Image;
-        //        normalizedImage.Width = imageData.Width;
-        //        normalizedImage.Height = imageData.Height;
-        //        normalizedImage.Stride = imageData.Stride;
-        //        normalizedImage.Format = (ImagePixelFormat)imageData.Format;
-        //        normalizedImage.Data = imageData.Bytes.ToArray();
-        //    }
-        //    return normalizedImage;
-        //}
+            iQuadrilateral quad = new iQuadrilateral();
+            quad.Points = new NSObject[4];
+            //quad.Points[0].CGPointValue = new CGPoint(points[0], points[1]);
+            //quad.Points[1].CGPointValue = new CGPoint(points[2], points[3]);
+            //quad.Points[2].CGPointValue = new CGPoint(points[4], points[5]);
+            //quad.Points[3].CGPointValue = new CGPoint(points[6], points[7]);
+            NSError error;
+            iNormalizedImageResult? result = normalizer.NormalizeBuffer(imageData, quad, out error);
+            return GetNormalizedImage(result);
+        }
+
+        private NormalizedImage GetNormalizedImage(iNormalizedImageResult? result)
+        {
+            NormalizedImage normalizedImage = new NormalizedImage();
+            if (result != null)
+            {
+                iImageData imageData = result.Image;
+                normalizedImage.Width = (int)imageData.Width;
+                normalizedImage.Height = (int)imageData.Height;
+                normalizedImage.Stride = (int)imageData.Stride;
+                normalizedImage.Format = (ImagePixelFormat)imageData.Format;
+                normalizedImage.Data = imageData.Bytes.ToArray();
+            }
+            return normalizedImage;
+        }
     }
 }
