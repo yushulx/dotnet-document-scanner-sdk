@@ -263,10 +263,10 @@ namespace Dynamsoft
         {
             iQuadrilateral quad = new iQuadrilateral();
             quad.Points = new NSObject[4];
-            //quad.Points[0].CGPointValue = new CGPoint(points[0], points[1]);
-            //quad.Points[1].CGPointValue = new CGPoint(points[2], points[3]);
-            //quad.Points[2].CGPointValue = new CGPoint(points[4], points[5]);
-            //quad.Points[3].CGPointValue = new CGPoint(points[6], points[7]);
+            quad.Points[0] = NSValue.FromCGPoint(new CGPoint(points[0], points[1]));
+            quad.Points[1] = NSValue.FromCGPoint(new CGPoint(points[2], points[3]));
+            quad.Points[2] = NSValue.FromCGPoint(new CGPoint(points[4], points[5]));
+            quad.Points[3] = NSValue.FromCGPoint(new CGPoint(points[6], points[7]));
 
             NSError error;
             iNormalizedImageResult? result = normalizer.NormalizeFile(filename, quad, out error);
@@ -286,10 +286,10 @@ namespace Dynamsoft
 
             iQuadrilateral quad = new iQuadrilateral();
             quad.Points = new NSObject[4];
-            //quad.Points[0].CGPointValue = new CGPoint(points[0], points[1]);
-            //quad.Points[1].CGPointValue = new CGPoint(points[2], points[3]);
-            //quad.Points[2].CGPointValue = new CGPoint(points[4], points[5]);
-            //quad.Points[3].CGPointValue = new CGPoint(points[6], points[7]);
+            quad.Points[0] = NSValue.FromCGPoint(new CGPoint(points[0], points[1]));
+            quad.Points[1] = NSValue.FromCGPoint(new CGPoint(points[2], points[3]));
+            quad.Points[2] = NSValue.FromCGPoint(new CGPoint(points[4], points[5]));
+            quad.Points[3] = NSValue.FromCGPoint(new CGPoint(points[6], points[7]));
             NSError error;
             iNormalizedImageResult? result = normalizer.NormalizeBuffer(imageData, quad, out error);
             return GetNormalizedImage(result);

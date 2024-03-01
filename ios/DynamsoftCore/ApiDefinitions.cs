@@ -13,7 +13,7 @@ namespace Com.Dynamsoft.Core
 	{
 		// @property (nonatomic) NSArray * _Nonnull points;
 		[Export ("points", ArgumentSemantic.Assign)]
-		NSObject[] Points { get; set; }
+        NSObject[] Points { get; set; }
 
 		// -(BOOL)isPointInQuadrilateral:(CGPoint)point __attribute__((swift_name("isPointInQuadrilateral(_:)")));
 		[Export ("isPointInQuadrilateral:")]
