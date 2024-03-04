@@ -55,10 +55,6 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
-		<ProjectReference Include="..\..\android\DocumentScannerSDK.csproj" />
-	</ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.3" />
 	</ItemGroup>
@@ -69,7 +65,12 @@
 	  </MauiXaml>
 	</ItemGroup>
 
-	<!--<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-ios'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
+		<ProjectReference Include="..\..\android\android.csproj" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-ios'">
 	  <ProjectReference Include="..\..\ios\ios.csproj" />
-	</ItemGroup>-->
+	</ItemGroup>
+
 </Project>

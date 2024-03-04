@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net7.0-ios</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
-    <IsBindingProject>true</IsBindingProject>
     <AssemblyName>DocumentScannerSDK</AssemblyName>
+    <IsBindingProject>true</IsBindingProject>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -41,4 +41,5 @@
       <Frameworks></Frameworks>
     </NativeReference>
   </ItemGroup>
+
 </Project>

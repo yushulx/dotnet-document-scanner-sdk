@@ -2,7 +2,7 @@ using System;
 using Foundation;
 using ObjCRuntime;
 using UIKit;
-using Com.Dynamsoft.Core;
+using DynamsoftCore;
 
 namespace Com.Dynamsoft.Ddn
 {

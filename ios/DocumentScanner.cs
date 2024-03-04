@@ -1,4 +1,4 @@
-﻿using Com.Dynamsoft.Core;
+﻿using DynamsoftCore;
 using Com.Dynamsoft.Ddn;
 using static Dynamsoft.DocumentScanner;
 using System.ComponentModel;

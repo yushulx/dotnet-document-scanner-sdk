@@ -1,7 +1,7 @@
 ﻿using SkiaSharp;
 using SkiaSharp.Views.Maui;
 
-#if ANDROID 
+#if ANDROID || IOS
 using Dynamsoft;
 
 #endif
@@ -15,7 +15,7 @@ public partial class ImagePage : ContentPage
 
     SKBitmap bitmap;
     bool isDataReady = false;
-#if ANDROID 
+#if ANDROID || IOS
     private DocumentScanner documentScanner;
     
 #endif
@@ -38,7 +38,7 @@ public partial class ImagePage : ContentPage
         {
             Console.WriteLine(ex);
         }
-#if ANDROID
+#if ANDROID || IOS
         documentScanner = DocumentScanner.Create();
         DecodeFile(imagepath);
 #endif
@@ -54,7 +54,7 @@ public partial class ImagePage : ContentPage
         canvasView.InvalidateSurface();
     }
 
-#if ANDROID 
+#if ANDROID || IOS
     async void DecodeFile(string imagepath)
     {
         await Task.Run(() =>
@@ -87,14 +87,6 @@ public partial class ImagePage : ContentPage
         SKCanvas canvas = surface.Canvas;
         canvas.Clear();
 
-        if (!isDataReady)
-        {
-            if (bitmap != null) canvas.DrawBitmap(bitmap, new SKPoint(0, 0));
-            return;
-        }
-
-        var imageCanvas = new SKCanvas(bitmap);
-
         float StrokeWidth = 4;
 
         SKPaint skPaint = new SKPaint
@@ -104,10 +96,20 @@ public partial class ImagePage : ContentPage
             StrokeWidth = StrokeWidth,
         };
 
+         float scale = Math.Min((float)info.Width / bitmap.Width,
+                           (float)info.Height / bitmap.Height);
+        float x = (info.Width - scale * bitmap.Width) / 2;
+        float y = (info.Height - scale * bitmap.Height) / 2;
+        SKRect destRect = new SKRect(x, y, x + scale * bitmap.Width,
+                                           y + scale * bitmap.Height);
+
+
         if (isDataReady)
         {
             if (points != null)
             {
+                var imageCanvas = new SKCanvas(bitmap);
+
                 SKPoint[] skPoints = new SKPoint[4];
                 for (int i = 0; i < 4; i++)
                 {
@@ -134,15 +136,8 @@ public partial class ImagePage : ContentPage
             }
         }
 
+        if (bitmap != null) canvas.DrawBitmap(bitmap, destRect);
 
-        float scale = Math.Min((float)info.Width / bitmap.Width,
-                           (float)info.Height / bitmap.Height);
-        float x = (info.Width - scale * bitmap.Width) / 2;
-        float y = (info.Height - scale * bitmap.Height) / 2;
-        SKRect destRect = new SKRect(x, y, x + scale * bitmap.Width,
-                                           y + scale * bitmap.Height);
-
-        canvas.DrawBitmap(bitmap, destRect);
     }
 
 }
