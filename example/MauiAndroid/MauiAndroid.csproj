@@ -69,7 +69,7 @@
 	  </MauiXaml>
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-ios'">
+	<!--<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-ios'">
 	  <ProjectReference Include="..\..\ios\ios.csproj" />
-	</ItemGroup>
+	</ItemGroup>-->
 </Project>
