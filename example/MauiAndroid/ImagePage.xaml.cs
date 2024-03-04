@@ -1,32 +1,36 @@
-﻿#if ANDROID 
-using Dynamsoft;
-using SkiaSharp;
+﻿using SkiaSharp;
 using SkiaSharp.Views.Maui;
+
+#if ANDROID 
+using Dynamsoft;
+
 #endif
 
 namespace MauiAndroid;
 
 public partial class ImagePage : ContentPage
 {
-#if ANDROID 
-    private DocumentScanner documentScanner;
     int[] points;
 
 
     SKBitmap bitmap;
     bool isDataReady = false;
+#if ANDROID 
+    private DocumentScanner documentScanner;
+    
 #endif
 
     public ImagePage(string imagepath)
     {
         InitializeComponent();
 
-#if ANDROID 
+
         try
         {
             using (var stream = new SKFileStream(imagepath))
             {
                 bitmap = SKBitmap.Decode(stream);
+                Refresh();
             }
 
         }
@@ -34,10 +38,20 @@ public partial class ImagePage : ContentPage
         {
             Console.WriteLine(ex);
         }
+#if ANDROID
         documentScanner = DocumentScanner.Create();
         DecodeFile(imagepath);
 #endif
 
+    }
+
+    async void Refresh()
+    {
+        await Task.Run(() =>
+        {
+            return Task.CompletedTask;
+        });
+        canvasView.InvalidateSurface();
     }
 
 #if ANDROID 
@@ -63,16 +77,21 @@ public partial class ImagePage : ContentPage
         canvasView.InvalidateSurface();
     }
 
+#endif
+
     void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
     {
-        if (!isDataReady)
-        {
-            return;
-        }
+        
         SKImageInfo info = args.Info;
         SKSurface surface = args.Surface;
         SKCanvas canvas = surface.Canvas;
         canvas.Clear();
+
+        if (!isDataReady)
+        {
+            if (bitmap != null) canvas.DrawBitmap(bitmap, new SKPoint(0, 0));
+            return;
+        }
 
         var imageCanvas = new SKCanvas(bitmap);
 
@@ -125,5 +144,5 @@ public partial class ImagePage : ContentPage
 
         canvas.DrawBitmap(bitmap, destRect);
     }
-#endif
+
 }
