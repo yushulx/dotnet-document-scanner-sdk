@@ -65,12 +65,16 @@
 	  </MauiXaml>
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
+	<!--<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
 		<ProjectReference Include="..\..\android\android.csproj" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-ios'">
 	  <ProjectReference Include="..\..\ios\ios.csproj" />
+	</ItemGroup>-->
+
+	<ItemGroup>
+		<PackageReference Include="DocumentScannerSDK" Version="2.0.0" />
 	</ItemGroup>
 
 </Project>
