@@ -10,6 +10,7 @@ Click [here](https://www.dynamsoft.com/customer/license/trialLicense?product=ddn
 - Windows (x64)
 - Linux (x64)
 - Android
+- iOS
 
 ## API
 - `public static void InitLicense(string license)`: Initialize the license key. It must be called before creating the document scanner object.
@@ -159,9 +160,6 @@ namespace Test
 
 
 ## Example
-- [.NET MAUI for Android](https://github.com/yushulx/dotnet-document-scanner-sdk/tree/main/example/MauiApp)
-
-    ![.NET MAUI Document Scanner](https://www.dynamsoft.com/codepool/img/2024/03/dotnet-maui-ios-document-detection.png)
 
 - [Command-line Document Scanner](https://github.com/yushulx/dotnet-document-scanner-sdk/tree/main/example/command-line) (**Windows & Linux**)
     
@@ -183,6 +181,10 @@ namespace Test
     ```
     
     ![.NET WinForms Document Scanner](https://camo.githubusercontent.com/ee30a750052f5392f20aefcaffbb4308cfabafa9cd610642f6b0ff669195f2dc/68747470733a2f2f7777772e64796e616d736f66742e636f6d2f636f6465706f6f6c2f696d672f323032322f30392f646f746e65742d77696e666f726d2d646f63756d656e742d7363616e6e65722e706e67)
+
+- [.NET MAUI](https://github.com/yushulx/dotnet-document-scanner-sdk/tree/main/example/MauiApp)
+
+    ![.NET MAUI Document Scanner](https://camo.githubusercontent.com/91a6cb1ea0a964510154e75100c828c2ccf6eece9acbd01ab92a07686e2caa12/68747470733a2f2f7777772e64796e616d736f66742e636f6d2f636f6465706f6f6c2f696d672f323032342f30332f646f746e65742d6d6175692d696f732d646f63756d656e742d646574656374696f6e2e706e67)
     
 ## Building NuGet Package from Source Code
 
