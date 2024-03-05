@@ -30,7 +30,7 @@
 
         <!-- iOS -->
         <file src="ios\bin\Release\net7.0-ios\DocumentScannerSDK.dll" target="lib\net7.0-ios16.1" />
-        <file src="ios\bin\Release\net7.0-ios\DocumentScannerSDK.resources\**\*.*"
+        <file src="ios\bin\Release\net7.0-ios\DocumentScannerSDK.resources\"
             target="lib\net7.0-ios16.1\DocumentScannerSDK.resources" />
 
     </files>
