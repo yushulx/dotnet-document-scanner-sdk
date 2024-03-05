@@ -159,7 +159,10 @@ namespace Test
 
 
 ## Example
-- [.NET MAUI for Android](https://github.com/yushulx/dotnet-document-scanner-sdk/tree/main/example/MauiAndroid)
+- [.NET MAUI for Android](https://github.com/yushulx/dotnet-document-scanner-sdk/tree/main/example/MauiApp)
+
+    ![.NET MAUI Document Scanner](https://www.dynamsoft.com/codepool/img/2024/03/dotnet-maui-ios-document-detection.png)
+
 - [Command-line Document Scanner](https://github.com/yushulx/dotnet-document-scanner-sdk/tree/main/example/command-line) (**Windows & Linux**)
     
     ```bash
@@ -190,6 +193,10 @@ dotnet build --configuration Release
 
 # build dll for android
 cd android
+dotnet build --configuration Release
+
+# build dll for iOS
+cd ios
 dotnet build --configuration Release
 
 # build nuget package

@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>DocumentScannerSDK</id>
-        <version>1.2.0</version>
+        <version>2.0.0</version>
         <title>Document Scanner SDK</title>
         <authors>yushulx</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -11,8 +11,8 @@
         <!-- <icon>icon.png</icon> -->
         <projectUrl>https://github.com/yushulx/dotnet-document-scanner-sdk</projectUrl>
         <description>The Document Scanner SDK is a .NET wrapper for Dynamsoft Document Normalizer,
-            supporting x64 Windows, x64 Linux and Android.</description>
-        <releaseNotes>Added support for Android.</releaseNotes>
+            supporting x64 Windows, x64 Linux, Android and iOS.</description>
+        <releaseNotes>Added support for iOS.</releaseNotes>
         <copyright>$copyright$</copyright>
         <tags>document;document-scan;edge-detection;document-detection</tags>
     </metadata>
@@ -29,8 +29,8 @@
         <file src="android\bin\Release\net7.0-android\**\*.*" target="lib\net7.0-android33.0" />
 
         <!-- iOS -->
-        <file src="ios\sdk\bin\Release\net7.0-ios\*.dll" target="lib\net7.0-ios16.1" />
-        <file src="ios\sdk\bin\Release\net7.0-ios\DocumentScannerSDK.resources\**\*.*"
+        <file src="ios\bin\Release\net7.0-ios\DocumentScannerSDK.dll" target="lib\net7.0-ios16.1" />
+        <file src="ios\bin\Release\net7.0-ios\DocumentScannerSDK.resources\**\*.*"
             target="lib\net7.0-ios16.1\DocumentScannerSDK.resources" />
 
     </files>
