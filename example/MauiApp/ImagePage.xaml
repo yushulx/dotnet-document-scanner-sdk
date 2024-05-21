@@ -4,11 +4,30 @@
              xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
              x:Class="MauiAndroid.ImagePage"
              Title="ImagePage">
-    <ScrollView>
-        <Grid>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Share" Clicked="OnShareButtonClicked"/>
+    </ContentPage.ToolbarItems>
+    <AbsoluteLayout>
+        <StackLayout AbsoluteLayout.LayoutBounds="0.5,0,AutoSize,AutoSize"
+                     AbsoluteLayout.LayoutFlags="PositionProportional"
+                     Orientation="Horizontal"
+                     HorizontalOptions="Center">
+            <RadioButton x:Name="colorRadioButton" Content="Color" CheckedChanged="OnColorModeChanged" GroupName="ColorMode" />
+            <RadioButton x:Name="grayscaleRadioButton" Content="Grayscale" CheckedChanged="OnColorModeChanged" GroupName="ColorMode"/>
+            <RadioButton x:Name="bwRadioButton" Content="B/W" CheckedChanged="OnColorModeChanged" GroupName="ColorMode" IsChecked="True"/>
+        </StackLayout>
+        
+        <Grid AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
             <skia:SKCanvasView x:Name="canvasView"
-                           HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                           PaintSurface="OnCanvasViewPaintSurface" />
+                               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                               PaintSurface="OnCanvasViewPaintSurface" />
         </Grid>
-    </ScrollView>
+        <Button Text="Crop" 
+                AbsoluteLayout.LayoutBounds="1,1,100,80"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                BackgroundColor="LightBlue"
+                TextColor="White"
+                Margin="0,0,16,16"
+                Clicked="OnCropButtonClicked"/>
+    </AbsoluteLayout>
 </ContentPage>
