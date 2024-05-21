@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Dynamsoft;
+using Microsoft.UI.Xaml;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -16,6 +17,7 @@ namespace MauiAndroid.WinUI
         /// </summary>
         public App()
         {
+            DocumentScanner.InitLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==", this);
             this.InitializeComponent();
         }
 

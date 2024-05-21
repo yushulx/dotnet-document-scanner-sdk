@@ -1,11 +1,7 @@
 ﻿using SkiaSharp;
 using SkiaSharp.Views.Maui;
 using System.Runtime.InteropServices;
-
-#if ANDROID || IOS
 using Dynamsoft;
-
-#endif
 
 namespace MauiAndroid;
 
@@ -14,11 +10,9 @@ public partial class ImagePage : ContentPage
     int[] points = null;
     SKBitmap bitmap = null;
     bool isDataReady = false;
-#if ANDROID || IOS
     private DocumentScanner documentScanner;
     private string imagepath;
     bool isNormalized = false;
-#endif
 
     public ImagePage(string imagepath)
     {
@@ -30,7 +24,7 @@ public partial class ImagePage : ContentPage
             using (var stream = new SKFileStream(imagepath))
             {
                 bitmap = SKBitmap.Decode(stream);
-                Refresh();
+                //Refresh();
             }
 
         }
@@ -38,10 +32,9 @@ public partial class ImagePage : ContentPage
         {
             Console.WriteLine(ex);
         }
-#if ANDROID || IOS
+
         documentScanner = DocumentScanner.Create();
         DecodeFile(imagepath);
-#endif
 
     }
 
@@ -54,7 +47,6 @@ public partial class ImagePage : ContentPage
         canvasView.InvalidateSurface();
     }
 
-#if ANDROID || IOS
     async void DecodeFile(string imagepath)
     {
         await Task.Run(() =>
@@ -77,7 +69,6 @@ public partial class ImagePage : ContentPage
         canvasView.InvalidateSurface();
     }
 
-#endif
 
     void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
     {
@@ -139,7 +130,6 @@ public partial class ImagePage : ContentPage
 
     private void Normalize()
     {
-#if ANDROID || IOS
         if (points != null)
         {
             DocumentScanner.NormalizedImage normalizedImage = documentScanner.NormalizeFile(imagepath, points);
@@ -202,7 +192,6 @@ public partial class ImagePage : ContentPage
 
             canvasView.InvalidateSurface();
         }
-#endif
     }
 
     private void OnCropButtonClicked(object sender, EventArgs e)
@@ -246,7 +235,6 @@ public partial class ImagePage : ContentPage
 
     private void OnColorModeChanged(object sender, CheckedChangedEventArgs e)
     {
-#if ANDROID || IOS
         if (e.Value)
         {
             var radioButton = sender as RadioButton;
@@ -269,6 +257,5 @@ public partial class ImagePage : ContentPage
                 Normalize();
             }
         }
-#endif
     }
 }
