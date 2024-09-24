@@ -27,7 +27,7 @@ public class DocumentScanner
                 NormalizedImageResult? image = (NormalizedImageResult?)Marshal.PtrToStructure(_dataPtr, typeof(NormalizedImageResult));
                 if (image != null)
                 {
-                    int ret = DDN_SaveImageDataToFile(image.Value.ImageData, filename);
+                    int ret = NormalizedImageResult_SaveToFile(_dataPtr, filename);
 
 #if DEBUG
                     Console.WriteLine("SaveImageDataToFile: " + ret);
@@ -177,7 +177,7 @@ public class DocumentScanner
     static extern int DDN_FreeNormalizedImageResult(ref IntPtr result);
 
     [DllImport("DynamsoftDocumentNormalizerx64")]
-    static extern int DDN_SaveImageDataToFile(IntPtr image, string filename);
+    static extern int NormalizedImageResult_SaveToFile(IntPtr image, string filename);
 
     [DllImport("DynamsoftDocumentNormalizerx64")]
     static extern int DDN_DetectQuadFromBuffer(IntPtr handler, IntPtr sourceImage, string templateName, ref IntPtr pResultArray);
@@ -214,7 +214,7 @@ public class DocumentScanner
     static extern int DDN_FreeNormalizedImageResult(ref IntPtr result);
 
     [DllImport("DynamsoftDocumentNormalizer")]
-    static extern int DDN_SaveImageDataToFile(IntPtr image, string filename);
+    static extern int NormalizedImageResult_SaveToFile(IntPtr image, string filename);
 
     [DllImport("DynamsoftDocumentNormalizer")]
     static extern int DDN_DetectQuadFromBuffer(IntPtr handler, IntPtr sourceImage, string templateName, ref IntPtr pResultArray);

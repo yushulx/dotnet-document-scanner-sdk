@@ -4,7 +4,7 @@ The .NET Document Scanner SDK is a C# wrapper for [Dynamsoft Document Normalizer
 
 
 ## License Activation
-Click [here](https://www.dynamsoft.com/customer/license/trialLicense?product=ddn) to get a valid license key.
+Click [here](https://www.dynamsoft.com/customer/license/trialLicense/?product=dcv&package=cross-platform) to get a 30-day trial license key.
 
 ## Supported Platforms
 - Windows (x64)
